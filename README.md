@@ -1,3 +1,36 @@
+# Plateforme de Gestion de Transactions d'Argent
+
+## Description
+
+Ce projet consiste en une plateforme web de gestion de transactions d'argent pour une petite structure de transfert d'argent. La plateforme permet aux clients de gérer leurs transactions, ainsi que de déposer ou retirer de l'argent en toute sécurité.
+
+## Fonctionnalités
+
+- **Création de Compte** : Les agents peuvent créer des comptes pour les clients et distributeurs en fournissant des informations personnelles (nom, prénom, numéro de téléphone, photo, date de naissance, adresse et numéro de carte d'identité).
+  
+- **Gestion des Comptes** : Les agents peuvent modifier ou bloquer des comptes et créditer les comptes des distributeurs.
+
+- **Connexion Sécurisée** :
+  - **Clients et Distributeurs** : Connexion via numéro de compte et mot de passe.
+  - **Agents** : Connexion via email et mot de passe.
+  - Mécanismes de récupération de mot de passe pour les utilisateurs.
+
+- **Transactions** : Les distributeurs peuvent créditer les comptes des clients ou effectuer des retraits, avec validation via QR code si le compte est actif. 
+
+- **Suivi des Transactions** : Les utilisateurs peuvent voir leur solde en temps réel, l'historique de leurs transactions, et annuler des transactions si nécessaire.
+
+## Technologies Utilisées
+
+- **Langage** : [Préciser le langage utilisé, par exemple PHP, JavaScript]
+- **Framework** : [Préciser le framework utilisé, par exemple Laravel]
+- **Base de Données** : [Préciser le système de base de données, par exemple MySQL]
+
+## Installation
+
+1. Clonez le dépôt :
+   ```bash
+   git clone https://github.com/username/nom-du-repo.git
+   cd nom-du-repo
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
