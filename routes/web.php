@@ -2,9 +2,19 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+// Tableaux de bord
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard/client', [DashboardController::class, 'clientDashboard'])->name('dashboard.client');
+    Route::get('/dashboard/agent', [DashboardController::class, 'agentDashboard'])->name('dashboard.agent');
+    Route::get('/dashboard/distributeur', [DashboardController::class, 'distributeurDashboard'])->name('dashboard.distributeur');
 });
 
 Route::get('/dashboard', function () {

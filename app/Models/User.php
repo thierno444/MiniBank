@@ -2,47 +2,54 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * Les attributs qui sont assignables en masse.
      *
-     * @var array<int, string>
+     * @var array
      */
     protected $fillable = [
-        'name',
+        'prenom',
+        'nom',
+        'telephone', // Champ utilisé pour l'authentification
         'email',
+        'num_compte',
+        'adresse',
+        'carte_identite',
+        'photo',
+        'date_naissance',
         'password',
+        'blocked',
+        'role',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
+     * Boot method pour ajouter des comportements par défaut lors de la création d'un utilisateur.
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected static function boot()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        parent::boot();
+
+        // Générer le numéro de compte avant de créer un utilisateur
+        static::creating(function ($user) {
+            $user->num_compte = self::generateAccountNumber($user->role);
+            
+
+        });
+    }
+
+    /**
+     * Générer un numéro de compte unique basé sur le rôle de l'utilisateur.
+     */
+    private static function generateAccountNumber($role)
+    {
+        return strtoupper(substr($role, 0, 3)) . date('Y') . rand(1000, 9999);
     }
 }
