@@ -27,7 +27,7 @@
             <div class="position-sticky d-flex flex-column" style="height: 100vh;">
                 <!-- Logo centré -->
                 <div class="p-3 text-center">
-                    <img src="{{ asset('storage.images.Minibank.png') }}" alt="Logo" class="img-fluid mx-auto d-block" width="300">
+                    <img src="{{ asset('images/Minibank.png') }}" alt="Logo" class="img-fluid mx-auto d-block" width="300">
                 </div>
                 
                 <!-- Navigation Links -->
@@ -115,6 +115,7 @@
                 
                 <p>Bienvenue sur ton tableau de bord {{ auth()->user()->prenom }} .</p>
                 <!-- Ajouter d'autres contenus ici -->
+                @yield('content')
             </div>
         </div>
     </div>

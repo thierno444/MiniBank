@@ -167,7 +167,12 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="telephone">Numéro de téléphone</label>
-                                    <input type="text" class="form-control" id="telephone" name="telephone" placeholder="Ex: +221 77 290 45 45" pattern="^(\\+221)[0-9]{9}$" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="9">
+                                    <div class="input-group">
+                                        <span class="input-group-text">+221</span>
+                                        <input type="text" class="form-control" id="telephone" name="telephone" placeholder="Ex: 77 290 45 45" required 
+                                               oninput="validatePhoneNumber(this)">
+                                    </div>
+                                    <small class="form-text text-danger" id="phoneError" style="display: none;">Veuillez entrer un numéro valide entre 700000000 et 789999999.</small>
                                 </div>
         
                                 <div class="form-group col-md-6">
@@ -220,6 +225,23 @@
             </div>
         
             <script>
+
+
+function validatePhoneNumber(input) {
+            // Enlever tous les caractères non numériques
+            input.value = input.value.replace(/[^0-9]/g, '');
+
+            // Vérifier si le numéro est compris entre 700000000 et 789999999
+            const phoneNumber = parseInt(input.value, 10);
+            const errorMessage = document.getElementById('phoneError');
+            if (phoneNumber < 700000000 || phoneNumber > 789999999) {
+                errorMessage.style.display = 'block'; // Afficher le message d'erreur
+            } else {
+                errorMessage.style.display = 'none'; // Cacher le message d'erreur
+            }
+        }
+
+
                 function displayImage(input) {
                     var file = input.files[0];
                     if (file) {

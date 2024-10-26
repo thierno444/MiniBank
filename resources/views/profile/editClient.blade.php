@@ -7,6 +7,8 @@
 </head>
 <body>
 
+    @extends('layouts.sidebar-navbarC')
+
     @section('content')
     <div class="container mt-5">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
