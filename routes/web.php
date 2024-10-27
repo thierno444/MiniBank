@@ -3,14 +3,51 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/side-nav', function () {
+    return view('layouts.sidebar-navbar'); // afficheage sidebar et navbar
+});
+
+Route::get('/users/{id}/compte', [UserController::class, 'getCompte']);
+Route::get('/distributeur-transactions', [TransactionController::class, 'index'])->name('distributeur.transactions');
+Route::post('/annuler-transaction', [TransactionController::class, 'annulerTransaction'])->name('annuler.transaction');
+
+
+Route::post('/deposer', [TransactionController::class, 'deposer'])->name('deposer');
+Route::post('/retirer', [TransactionController::class, 'retirer'])->name('retirer');
+
+Route::get('/client/search', [ClientController::class, 'search'])->name('client.search');
+
+Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('transaction.show');
+
+Route::get('/distributeur-transactions', [TransactionController::class, 'index'])
+    ->name('distributeur.transactions');
+
+
+
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    
+
+    Route::middleware('auth')->group(function () {
+        Route::get('/client/transactions', [ClientController::class, 'index'])->name('client.transactions');
+    });
+    
+    Route::get('/api/get-account-info/{accountNumber}', [TransactionController::class, 'getAccountInfo']);
+    
+    Route::get('/transactions/{client_id}', [TransactionController::class, 'getTransactions']);
+    
+
+
 
 // Tableaux de bord
 Route::middleware(['auth'])->group(function () {

@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str; // Assurez-vous que cette ligne est présente
+use Illuminate\Validation\Rules;
+use App\Models\User;
 use Illuminate\View\View;
-
 class PasswordResetLinkController extends Controller
 {
     /**
@@ -15,7 +19,7 @@ class PasswordResetLinkController extends Controller
      */
     public function create(): View
     {
-        return view('auth.forgot-password');
+        return view('auth.forgot-password'); // La vue du formulaire
     }
 
     /**
@@ -26,19 +30,22 @@ class PasswordResetLinkController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'email' => ['required', 'email'],
+            'telephone' => ['required', 'string'],
         ]);
-
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
-
-        return $status == Password::RESET_LINK_SENT
-                    ? back()->with('status', __($status))
-                    : back()->withInput($request->only('email'))
-                        ->withErrors(['email' => __($status)]);
+    
+        $user = User::where('telephone', $request->telephone)->first();
+    
+        if (!$user) {
+            return back()->withErrors(['telephone' => 'Aucun utilisateur trouvé avec ce numéro.']);
+        }
+    
+        // Simule l'envoi du lien de réinitialisation et stocke le numéro de téléphone
+        $token = Str::random(60); // Génère un token fictif
+        session()->flash('token', $token);
+        session()->flash('telephone', $request->telephone);
+    
+        // Ici, génère le lien (normalement, tu l'enverrais par SMS ou e-mail)
+        return back()->with('status', 'Un lien de réinitialisation a été envoyé.');
     }
+    
 }

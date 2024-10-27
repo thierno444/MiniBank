@@ -3,56 +3,70 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>MiniBank - Page d'Accueil</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4; /* Couleur de fond de la page */
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
         }
 
-        /* Styles pour la barre de navigation */
         .navbar {
-            background-color: #3b82f6;
-            height: 50vh; /* Occupe la moitié de la hauteur de la page */
+            background-color: #1e40af;
+            height: 27vh;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             color: white;
-            position: relative; /* Position relative pour l'affichage du contenu */
+            text-align: center;
         }
 
         h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            margin-top: 40px;
             font-size: 2rem;
-            margin-bottom: 20px;
         }
 
         footer {
-            background-color: #3b82f6;
+            background-color: #1e40af;
             color: white;
             text-align: center;
-            padding: 10px 0;
-            position: relative;
-            z-index: 0; /* S'assurer que le footer est derrière le contenu */
+            padding: 15px 0;
         }
 
-        /* Styles supplémentaires pour le contenu principal */
         .content {
             position: relative;
-            z-index: 1; /* Assure que le contenu est au-dessus de la navbar */
+            z-index: 1;
             text-align: center;
-            padding: 20px;
+            padding: 40px;
         }
 
         .lead {
             font-size: 1.25rem;
             margin-top: 20px;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: #3b82f6;
+        }
+
+        .feature {
+            margin: 20px 0;
+        }
+
+        .btn-custom {
+            background-color: #ffb900;
+            color: #fff;
         }
     </style>
 </head>
@@ -75,13 +89,30 @@
     <div class="content">
         <h2>Gérez vos transactions et paiements en toute sécurité</h2>
         <p class="lead">Fonctionnalités :</p>
-        <ul class="list-unstyled">
-            <li>🔹 Transferts d'argent rapides et sécurisés</li>
-            <li>🔹 Suivi de vos transactions en temps réel</li>
-            <li>🔹 Gestion facile des comptes clients</li>
-            <li>🔹 Accessibilité 24/7 sur toutes vos plateformes</li>
-        </ul>
+        <div class="row">
+            <div class="col-md-3 feature">
+                <div class="feature-icon">💸</div>
+                <h5>Transferts rapides</h5>
+                <p>Effectuez vos transferts d'argent en quelques clics.</p>
+            </div>
+            <div class="col-md-3 feature">
+                <div class="feature-icon">📊</div>
+                <h5>Suivi en temps réel</h5>
+                <p>Suivez vos transactions instantanément.</p>
+            </div>
+            <div class="col-md-3 feature">
+                <div class="feature-icon">👥</div>
+                <h5>Gestion simplifiée</h5>
+                <p>Gérez facilement vos comptes et clients.</p>
+            </div>
+            <div class="col-md-3 feature">
+                <div class="feature-icon">🕒</div>
+                <h5>Accessibilité 24/7</h5>
+                <p>Accédez à vos services à tout moment.</p>
+            </div>
+        </div>
         <p>Rejoignez-nous dès aujourd'hui pour profiter de tous nos services !</p>
+        <a href="{{ route('register') }}" class="btn btn-custom">Commencer maintenant</a>
     </div>
 
     <footer>

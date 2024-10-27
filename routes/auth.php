@@ -35,6 +35,10 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 });
 
+Route::get('/password/reset/{token}/{telephone}', [NewPasswordController::class, 'showResetForm'])->name('password.reset.form');
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');

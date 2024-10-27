@@ -41,7 +41,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" style="font-size: 1.25rem; color: #505887;">
+                        <a class="nav-link" href="{{ route('distributeur.transactions') }}" style="font-size: 1.25rem; color: #505887;">
                             <i class="bi bi-card-list"></i>
                             Transactions
                         </a>
@@ -75,81 +75,170 @@
         <!-- Main content -->
         <div class="main-content flex-grow-1" style="margin-left: 240px;">
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+              <!-- Navbar -->
+              <nav class="navbar navbar-expand-lg navbar-light bg-primary">
                 <div class="container-fluid">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle sidebar">
+                    <a class="navbar-brand text-white" href="#">
+                         Transactions Distributeur
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <a class="navbar-brand text-white" href="#">MiniBank</a>
+
                     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-                        <form class="d-flex me-3">
-                            <input class="form-control me-2" type="search" placeholder="Recherche..." aria-label="Search">
-                            <button class="btn btn-outline-light" type="submit">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </form>
+                    <form class="d-flex me-3" method="GET" action="{{ route('client.search') }}">
+                        <input class="form-control me-2" type="search" name="account_number" placeholder="Numéro de compte" aria-label="Search" required>
+                        <button class="btn btn-outline-light" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
 
-                        <ul class="navbar-nav">
-                            <li class="nav-item dropdown position-relative me-3">
-                                <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-bell" style="font-size: 1.5rem; color: white;"></i>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                        <!-- Menu de droite -->
+                        <ul class="navbar-nav align-items-center">
+                            <!-- Centre d'aide -->
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="#" data-bs-toggle="tooltip" title="Centre d'aide">
+                                    <i class="bi bi-question-circle fs-5"></i>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="notificationDropdown" style="width: 300px;">
-                                    <li class="dropdown-header text-center fw-bold">Notifications de transactions</li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <div class="d-flex align-items-center">
-                                                <div class="me-3">
-                                                    <i class="bi bi-arrow-down-circle-fill text-success"></i>
-                                                </div>
-                                                <div>
-                                                    <span class="fw-bold">Dépôt réussi</span>
-                                                    <small class="d-block text-muted">Montant : 200 000 FCFA</small>
-                                                    <small class="text-muted">Il y a 1 heure</small>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="#">
-                                            <div class="d-flex align-items-center">
-                                                <div class="me-3">
-                                                    <i class="bi bi-arrow-up-circle-fill text-danger"></i>
-                                                </div>
-                                                <div>
-                                                    <span class="fw-bold">Retrait effectué</span>
-                                                    <small class="d-block text-muted">Montant : 150 000 FCFA</small>
-                                                    <small class="text-muted">Il y a 30 minutes</small>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li class="text-center">
-                                        <a href="#" class="text-primary">Voir toutes les transactions</a>
-                                    </li>
-                                </ul>
                             </li>
-
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://via.placeholder.com/100' }}" class="rounded-circle" alt="User Profile" width="40" height="40">
+            
+                            <!-- Notifications -->
+                            <li class="nav-item dropdown me-3">
+                                <a class="nav-link position-relative" href="#" id="notificationsDropdown" data-bs-toggle="dropdown">
+                                    <i class="bi bi-bell fs-5"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                                        3
+                                        <span class="visually-hidden">notifications non lues</span>
+                                    </span>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="profileDropdown" style="width: 250px;">
-                                    <li class="text-center mb-2">
-                                        <img src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://via.placeholder.com/100' }}" class="rounded-circle mb-2" alt="User Photo" style="width: 80px; height: 80px; object-fit: cover;">
-                                    </li>
-                                    <li class="text-center"><strong>{{ auth()->user()->prenom }} {{ auth()->user()->nom }}</strong></li>
-                                    <li class="text-center text-muted mb-2">{{ auth()->user()->telephone }}</li>
-                                    <li class="text-center text-muted">Compte: {{ auth()->user()->num_compte }}</li>
-                                </ul>
+                                
+                                <!-- Dropdown notifications -->
+                                <div class="dropdown-menu dropdown-menu-end shadow-lg p-0" style="width: 380px;">
+                                    <div class="p-3 border-bottom">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-0">Notifications</h6>
+                                            <a href="#" class="text-decoration-none small">Tout marquer comme lu</a>
+                                        </div>
+                                    </div>
+                                    <div class="notifications-scroll" style="max-height: 400px; overflow-y: auto;">
+                                        <!-- Notification non lue -->
+                                        <div class="p-3 border-bottom bg-light">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0">
+                                                    <div class="rounded-circle p-2 bg-success bg-opacity-10">
+                                                        <i class="bi bi-check-circle text-success"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-1">Virement reçu</h6>
+                                                    <p class="mb-1 small">Vous avez reçu 50 000 FCFA de Jean Dupont</p>
+                                                    <span class="text-muted xsmall">Il y a 5 minutes</span>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <span class="badge bg-primary rounded-pill">Nouveau</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Autres notifications -->
+                                        <div class="p-3 border-bottom">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0">
+                                                    <div class="rounded-circle p-2 bg-warning bg-opacity-10">
+                                                        <i class="bi bi-exclamation-circle text-warning"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-1">Alerte de sécurité</h6>
+                                                    <p class="mb-1 small">Une nouvelle connexion a été détectée</p>
+                                                    <span class="text-muted xsmall">Il y a 1 heure</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 text-center border-top">
+                                        <a href="#" class="text-decoration-none">Voir toutes les notifications</a>
+                                    </div>
+                                </div>
+                            </li>
+            
+                            <!-- Menu utilisateur -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://via.placeholder.com/100' }}" 
+                                             class="rounded-circle profile-photo" 
+                                             width="40" height="40"
+                                             alt="Photo de profil">
+                                        <div class="d-none d-lg-block ms-2">
+                                            <div class="fw-bold">{{ auth()->user()->prenom }}</div>
+                                            <div class="small text-muted">{{ auth()->user()->role }}</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end profile-dropdown shadow-lg">
+                                    <div class="p-3 text-center border-bottom">
+                                        <img src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://via.placeholder.com/100' }}" 
+                                             class="rounded-circle mb-3 profile-photo" 
+                                             width="80" height="80"
+                                             alt="Photo de profil">
+                                        <h6 class="mb-1">{{ auth()->user()->prenom }} {{ auth()->user()->nom }}</h6>
+                                        <p class="small text-muted mb-0">{{ auth()->user()->telephone }}</p>
+                                        <div class="badge bg-success bg-opacity-10 text-success mt-2">
+                                            Compte vérifié <i class="bi bi-check-circle-fill ms-1"></i>
+                                        </div>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>N° Compte</span>
+                                            <span class="fw-bold">{{ auth()->user()->num_compte }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Statut</span>
+                                            <span class="text-success">Actif</span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+            
+                                    <a class="dropdown-item d-flex align-items-center py-2" href="{{ route('profile.edit') }}">
+                                        <i class="bi bi-gear me-3 text-muted"></i>
+                                        Paramètres
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <form method="POST" action="{{ route('logout') }}" class="p-2">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger w-100">
+                                            <i class="bi bi-box-arrow-right me-2"></i>Déconnexion
+                                        </button>
+                                    </form>
+                                </div>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
+
+ <!-- Modal pour afficher les informations du client -->
+ <div class="modal fade" id="clientModal" tabindex="-1" aria-labelledby="clientModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clientModalLabel">Informations du Client</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="clientDetails">
+                <p>Chargement des détails...</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 
             <!-- Dashboard Content -->
             <div class="container mt-4">
@@ -160,6 +249,42 @@
     </div>
 
     <script>
+
+
+
+document.querySelector('form.d-flex').addEventListener('submit', function(event) {
+            event.preventDefault(); // Empêche la soumission du formulaire
+
+            const accountNumber = event.target.account_number.value;
+
+            fetch(`/client/search?account_number=${accountNumber}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Client non trouvé');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Afficher les détails du client dans le modal
+                    const clientDetails = document.getElementById('clientDetails');
+                    clientDetails.innerHTML = `
+                        <strong>Nom :</strong> ${data.nom}<br>
+                        <strong>Prénom :</strong> ${data.prenom}<br>
+                        <strong>Téléphone :</strong> ${data.telephone}<br>
+                        <strong>Statut :</strong> ${data.blocked ? 'Bloqué' : 'Actif'}<br>
+
+                    `;
+                    // Ouvrir le modal
+                    const clientModal = new bootstrap.Modal(document.getElementById('clientModal'));
+                    clientModal.show();
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        });
+
+
+
         window.addEventListener("pageshow", function(event) {
             var historyTraversal = event.persisted || 
                                    (typeof window.performance !== "undefined" && 

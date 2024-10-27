@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -31,21 +32,21 @@ class AuthenticatedSessionController extends Controller
             'telephone' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
-
+    
         // Tenter de connecter l'utilisateur avec le numéro de téléphone et le mot de passe
-        if (!Auth::attempt(['telephone' => $request->telephone, 'password' => $request->password])) {
+        if (!Auth::attempt(['telephone' => $request->telephone, 'password' => $request->password], $request->remember)) {
             // Rediriger en cas d'échec de connexion avec un message d'erreur
             return back()->withErrors([
                 'telephone' => 'Les informations d\'identification sont incorrectes.',
             ])->onlyInput('telephone'); // Retourne uniquement l'entrée 'telephone'
         }
-
+    
         // Si la connexion réussit, régénérer la session pour éviter les attaques CSRF
         $request->session()->regenerate();
-
+    
         // Récupérer l'utilisateur actuellement connecté
         $user = Auth::user();
-
+    
         // Redirection vers le tableau de bord en fonction du rôle de l'utilisateur
         switch ($user->role) {
             case 'agent':
@@ -62,6 +63,7 @@ class AuthenticatedSessionController extends Controller
                 ]);
         }
     }
+    
 
     /**
      * Déconnecte l'utilisateur et détruit la session.
@@ -69,7 +71,7 @@ class AuthenticatedSessionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request)
     {
         // Déconnecter l'utilisateur
         Auth::guard('web')->logout();

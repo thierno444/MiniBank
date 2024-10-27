@@ -65,6 +65,7 @@ class RegisteredUserController extends Controller
         auth()->login($user);
 
         // Rediriger vers le tableau de bord avec un message de succès
-        return redirect()->route('dashboard')->with('success', $user->prenom . ' a été créé avec succès.');
+        return redirect()->route('dashboard.client')->with('success', $user->prenom . ' a été créé avec succès.');
+
     }
 }

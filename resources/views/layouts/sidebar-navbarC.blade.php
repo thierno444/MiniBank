@@ -106,19 +106,125 @@
                             </button>
                         </form>
 
-                        <ul class="navbar-nav">
-                            <!-- Icon de notification -->
-                            <li class="nav-item position-relative me-3">
-                                <a class="nav-link" href="#">
-                                    <i class="bi bi-bell" style="font-size: 1.5rem; color: white;"></i>
-                                 </a>
-                            </li>
-                            <!-- Profil utilisateur -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <img src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://via.placeholder.com/100' }}" class="rounded-circle" alt="User Profile" width="40" height="40">
-
+                        <!-- Menu de droite -->
+                        <ul class="navbar-nav align-items-center">
+                            <!-- Centre d'aide -->
+                            <li class="nav-item me-3">
+                                <a class="nav-link" href="#" data-bs-toggle="tooltip" title="Centre d'aide">
+                                    <i class="bi bi-question-circle fs-5"></i>
                                 </a>
+                            </li>
+            
+                            <!-- Notifications -->
+                            <li class="nav-item dropdown me-3">
+                                <a class="nav-link position-relative" href="#" id="notificationsDropdown" data-bs-toggle="dropdown">
+                                    <i class="bi bi-bell fs-5"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                                        3
+                                        <span class="visually-hidden">notifications non lues</span>
+                                    </span>
+                                </a>
+                                
+                                <!-- Dropdown notifications -->
+                                <div class="dropdown-menu dropdown-menu-end shadow-lg p-0" style="width: 380px;">
+                                    <div class="p-3 border-bottom">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-0">Notifications</h6>
+                                            <a href="#" class="text-decoration-none small">Tout marquer comme lu</a>
+                                        </div>
+                                    </div>
+                                    <div class="notifications-scroll" style="max-height: 400px; overflow-y: auto;">
+                                        <!-- Notification non lue -->
+                                        <div class="p-3 border-bottom bg-light">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0">
+                                                    <div class="rounded-circle p-2 bg-success bg-opacity-10">
+                                                        <i class="bi bi-check-circle text-success"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-1">Virement reçu</h6>
+                                                    <p class="mb-1 small">Vous avez reçu 50 000 FCFA de Jean Dupont</p>
+                                                    <span class="text-muted xsmall">Il y a 5 minutes</span>
+                                                </div>
+                                                <div class="flex-shrink-0 ms-2">
+                                                    <span class="badge bg-primary rounded-pill">Nouveau</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Autres notifications -->
+                                        <div class="p-3 border-bottom">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0">
+                                                    <div class="rounded-circle p-2 bg-warning bg-opacity-10">
+                                                        <i class="bi bi-exclamation-circle text-warning"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h6 class="mb-1">Alerte de sécurité</h6>
+                                                    <p class="mb-1 small">Une nouvelle connexion a été détectée</p>
+                                                    <span class="text-muted xsmall">Il y a 1 heure</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 text-center border-top">
+                                        <a href="#" class="text-decoration-none">Voir toutes les notifications</a>
+                                    </div>
+                                </div>
+                            </li>
+            
+                            <!-- Menu utilisateur -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown">
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://via.placeholder.com/100' }}" 
+                                             class="rounded-circle profile-photo" 
+                                             width="40" height="40"
+                                             alt="Photo de profil">
+                                        <div class="d-none d-lg-block ms-2">
+                                            <div class="fw-bold">{{ auth()->user()->prenom }}</div>
+                                            <div class="small text-muted">{{ auth()->user()->role }}</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end profile-dropdown shadow-lg">
+                                    <div class="p-3 text-center border-bottom">
+                                        <img src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://via.placeholder.com/100' }}" 
+                                             class="rounded-circle mb-3 profile-photo" 
+                                             width="80" height="80"
+                                             alt="Photo de profil">
+                                        <h6 class="mb-1">{{ auth()->user()->prenom }} {{ auth()->user()->nom }}</h6>
+                                        <p class="small text-muted mb-0">{{ auth()->user()->telephone }}</p>
+                                        <div class="badge bg-success bg-opacity-10 text-success mt-2">
+                                            Compte vérifié <i class="bi bi-check-circle-fill ms-1"></i>
+                                        </div>
+                                    </div>
+                                    <div class="p-3">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>N° Compte</span>
+                                            <span class="fw-bold">{{ auth()->user()->num_compte }}</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Statut</span>
+                                            <span class="text-success">Actif</span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+            
+                                    <a class="dropdown-item d-flex align-items-center py-2" href="{{ route('profile.edit') }}">
+                                        <i class="bi bi-gear me-3 text-muted"></i>
+                                        Paramètres
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <form method="POST" action="{{ route('logout') }}" class="p-2">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger w-100">
+                                            <i class="bi bi-box-arrow-right me-2"></i>Déconnexion
+                                        </button>
+                                    </form>
+                                </div>
                             </li>
                         </ul>
                     </div>
