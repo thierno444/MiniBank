@@ -23,17 +23,14 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 Route::get('/users/{id}/compte', [UserController::class, 'getCompte']);
-Route::get('/agent/users', [UserController::class, 'listUsers'])->name('agent.users');
-Route::post('/agent/user/{id}/block', [UserController::class, 'blockUser'])->name('user.block');
-Route::post('/agent/user/{id}/unblock', [UserController::class, 'unblockUser'])->name('user.unblock');
-Route::get('/agent/search-user', [UserController::class, 'searchUser'])->name('agent.searchUser');
+
 
 // Routes de transactions
 Route::post('/deposer', [TransactionController::class, 'deposer'])->name('deposer');
 Route::post('/retirer', [TransactionController::class, 'retirer'])->name('retirer');
 Route::post('/annuler-transaction', [TransactionController::class, 'annulerTransaction'])->name('annuler.transaction');
 Route::get('/distributeur-transactions', [TransactionController::class, 'index'])->name('distributeur.transactions');
-Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('transaction.show');
+//Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('transaction.show');
 Route::post('/transferer', [ClientController::class, 'transfer'])->name('transferer');
 
 // Routes pour les transactions clients
@@ -44,10 +41,10 @@ Route::middleware('auth')->group(function () {
 // Tableaux de bord
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/client', [DashboardController::class, 'clientDashboard'])->name('dashboard.client');
-    Route::get('/dashboard/agent', [DashboardController::class, 'agentDashboard'])->name('dashboard.agent');
+    //Route::get('/dashboard/agent', [DashboardController::class, 'agentDashboard'])->name('dashboard.agent');
     Route::get('/dashboard/distributeur', [DashboardController::class, 'distributeurDashboard'])->name('dashboard.distributeur');
 
-
+    Route::get('/dashboard/agent', [TransactionController::class, 'dashboard'])->name('dashboard.agent1');
     
     Route::get('/Agent/transactions', [TransactionController::class, 'agentTransactions'])->name('transactions');
     Route::get('/transactions/canceled', [TransactionController::class, 'canceledTransactions'])->name('transactions.canceled');
@@ -57,12 +54,19 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/transaction/cancel/{id}', [TransactionController::class, 'cancel'])->name('transaction.cancel');
     Route::post('/transaction/retrait', [TransactionController::class, 'retirer'])->name('transaction.retrait');
 
+    Route::get('/agent/users', [UserController::class, 'listUsers'])->name('agent.users');
+Route::post('/agent/user/{id}/block', [UserController::class, 'blockUser'])->name('user.block');
+Route::post('/agent/user/{id}/unblock', [UserController::class, 'unblockUser'])->name('user.unblock');
+Route::get('/agent/search-user', [UserController::class, 'searchUser'])->name('agent.searchUser');
+
+
     Route::get('/dashboard/data', [UserController::class, 'getDashboardData'])->name('dashboard.data');
     
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['verified'])->name('dashboard');
+   
 });
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['verified'])->name('dashboard');
 
 Route::get('/api/dashboard-data/{period}', [DashboardController::class, 'getChartDataByPeriod']);
 Route::get('/api/dashboard-data/refresh', [DashboardController::class, 'refreshDashboardData']);

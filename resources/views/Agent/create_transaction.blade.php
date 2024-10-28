@@ -29,7 +29,7 @@
                     <input type="number" class="form-control" id="montant" name="montant" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Valider</button>
-                <a href="{{ route('dashboard.agent') }}" class="btn btn-secondary">Annuler</a>
+                <a href="{{ route('dashboard.agent1') }}" class="btn btn-secondary">Annuler</a>
             </form>
         </div>
     </div>

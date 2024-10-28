@@ -61,6 +61,30 @@ class UserController extends Controller
         }
     }
 
+    public function searchUser(Request $request)
+    {
+    $numCompte = $request->input('num_compte');
+    $user = User::where('num_compte', $numCompte)->first();
+
+    if ($user) {
+        return response()->json([
+            'status' => 'found',
+            'user' => [
+                'id' => $user->id,
+                'nom' => $user->nom,
+                'prenom' => $user->prenom,
+                'telephone' => $user->telephone,
+                'email' => $user->email,
+                'num_compte' => $user->num_compte,
+                'carte_identite' => $user->carte_identite,
+                'blocked' => $user->blocked,
+            ]
+        ]);
+    } else {
+        return response()->json(['status' => 'not_found']);
+    }
+    }
+
     public function listUsers()
     {
         $agentId = Auth::id();

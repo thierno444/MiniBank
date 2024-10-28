@@ -50,7 +50,7 @@ class AuthenticatedSessionController extends Controller
         // Redirection vers le tableau de bord en fonction du rôle de l'utilisateur
         switch ($user->role) {
             case 'agent':
-                return redirect()->route('dashboard.agent');
+                return redirect()->route('dashboard.agent1');
             case 'distributeur':
                 return redirect()->route('dashboard.distributeur');
             case 'client':

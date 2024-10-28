@@ -33,7 +33,7 @@
                 <!-- Navigation Links -->
                 <ul class="nav flex-column flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('dashboard.agent') }}" style="font-size: 1.25rem; color: #505887;">
+                        <a class="nav-link active" aria-current="page" href="{{ route('dashboard.agent1') }}" style="font-size: 1.25rem; color: #505887;">
                             <i class="bi bi-house-door"></i>
                             Dashboard
                         </a>

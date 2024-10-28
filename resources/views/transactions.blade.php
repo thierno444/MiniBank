@@ -21,164 +21,138 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Mon Application</title>
+        <div class="container-fluid py-4">
+            <!-- Carte principale et bouton de transfert -->
+            <div class="row g-4 mb-4">
+                <div class="col-12 col-lg-8">
+                    <div class="card border-0 shadow-lg h-100">
+                        <div class="card-body position-relative bg-gradient-custom text-white rounded">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-4">
+                                        <h6 class="text-white-50 mb-2">Solde disponible</h6>
+                                        <div class="d-flex align-items-center">
+                                            <h3 class="mb-0">{{ number_format($compte->solde, 0) }} FCFA</h3>
+                                            <button class="btn btn-light btn-sm rounded-circle ms-2">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h6 class="text-white-50 mb-2">Nom d'utilisateur</h6>
+                                        <h5 class="mb-0">{{ $client->prenom }} {{ $client->nom }}</h5>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-phone me-2"></i>
+                                        <span>{{ $client->telephone }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <div class="bg-white p-3 rounded shadow-sm">
+                                        <img src="{{ asset('images/num.png') }}" alt="QR Code" class="img-fluid" width="70">
+                                        <div class="mt-2">
+                                            <small class="text-primary">QR Code de compte</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="h-100 d-flex align-items-center">
+                        <button onclick="openModal()" class="btn btn-primary btn-lg w-100 transfer-button">
+                            <i class="fas fa-exchange-alt me-2"></i>
+                            Transférer
+                        </button>
+                        
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Tableau des transactions -->
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0">Liste des Transactions</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Émetteur</th>
+                                    <th>Receveur</th>
+                                    <th>ID Transaction</th>
+                                    <th>Date</th>
+                                    <th>Montant</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($transactions as $transaction)
+                                <tr>
+                                    <td>{{ $transaction->emetteur->nom }} {{ $transaction->emetteur->prenom }}</td>
+                                    <td>{{ $transaction->receveur->nom }} {{ $transaction->receveur->prenom }}</td>
+                                    <td>{{ $transaction->id }}</td>
+                                    <td>{{ $transaction->created_at->format('d/m/Y H:i') }}</td>
+                                    <td>
+                                        <span class="{{ $transaction->type == 'depot' ? 'text-success' : 'text-danger' }}">
+                                            {{ $transaction->type == 'depot' ? '+' : '-' }}{{ number_format($transaction->montant, 2) }} FCFA
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-link text-primary">
+                                            <i class="fas fa-file-invoice me-1"></i>
+                                            Voir Facture
+                                        </button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <style>
-            body {
-                background-color: #f8f9fa;
-            }
-            .titre {
-                margin-left: 50px;
-                margin-top: 20px;
-            }
-            .carte {
-                width: 800px;
-                height: 310px;
-                background-color: #C0DFFF;
-                border: 1px solid #ced4da;
-                border-radius: 20px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                margin-left: 50px;
-                margin-top: 20px;
-            }
-            .transfer-button {
-                width: 300px;
-                height: 120px;
-                background-color: #2D60FF;
-                color: white;
-                border-radius: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-left: 20px; /* Ajuster l'espacement */
-                cursor: pointer;
-            }
-            .transactions {
-                width: 1500px;
-                background-color: #ffffff;
-                border: 1px solid #ced4da;
-                border-radius: 20px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                margin: 20px auto;
-                padding: 20px;
-                overflow-y: auto;
-            }
-            .pagination {
-                margin-top: 20px;
-                display: flex;
-                justify-content: flex-end;
-                margin-right: 50px;
-            }
+        .bg-gradient-custom {
+            background: linear-gradient(45deg, #2D60FF, #1E4BD1);
+        }
+        
+        .transfer-button {
+            height: 120px;
+            border-radius: 40px;
+            font-size: 1.25rem;
+            transition: transform 0.2s;
+        }
+        
+        .transfer-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .card {
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        .table th {
+            font-weight: 600;
+            background-color: #f8f9fa;
+        }
+        
+        .table td {
+            vertical-align: middle;
+        }
+        
+        .btn-link {
+            text-decoration: none;
+        }
+        
+        .btn-link:hover {
+            text-decoration: underline;
+        }
         </style>
-    </head>
-    <body>
-    
-        <h2 class="titre">Ma carte</h2>
-    
-        <div style="display: flex; justify-content: space-between; margin-left: 50px;">
-            <div class="carte">
-                <div style="display: flex; align-items: center; padding: 20px;">
-                    <div class="p-3" style="margin-right: 50px;">
-                        <p>Solde</p>
-                        <h5>{{ $compte ? number_format($compte->solde, 0) : '0' }} FCFA</h5>
-                        <p>Nom d'utilisateur</p>
-                        <h5>{{ $client->prenom }} {{ $client->nom }}</h5>
-                    </div>
-
-                </div>
-                <hr style="border: 1px solid #000000; margin: 0;">
-                <div class="p-3 d-flex justify-content-between align-items-center">
-                    <h5>{{ $client->telephone }}</h5>
-                    <img src="{{ asset('images/num.png') }}" alt="Icône Téléphone" style="width: 70px; height: 50px; margin-left: 10px;">
-                </div>
-                @if(session('message'))
-                    <div style="margin-top: 10px; color: {{ session('message_type') == 'success' ? 'green' : 'red' }};">
-                        {{ session('message') }}
-                    </div>
-                    <script>
-                        setTimeout(function() {
-                            var messageDiv = document.querySelector('div[style*="margin-top: 10px"]');
-                            if (messageDiv) {
-                                messageDiv.style.transition = 'opacity 0.5s ease';
-                                messageDiv.style.opacity = '0';
-                                setTimeout(function() {
-                                    messageDiv.style.display = 'none';
-                                }, 500);
-                            }
-                        }, 5000);
-                    </script>
-                @endif
-            </div>
-    
-            <div class="transfer-button" onclick="openModal()">
-                <img src="{{ asset('images/transferer.png') }}" alt="Transférer" style="width: 40px; height: 40px; margin-right: 10px;">
-                <h5 style="margin: 0;">Transférer</h5>
-            </div>
-        </div>
-    
-        <h3 style="margin-left: 300px; margin-top: 20px;">Liste des Transactions</h3>
-    
-        <div class="transactions">
-            <table class="table table-bordered" style="min-width: 100%;">
-                <thead>
-                    <tr>
-                        <th>Nom Émetteur</th>
-                        <th>Prénom Émetteur</th>
-                        <th>Nom Receveur</th>
-                        <th>Prénom Receveur</th>
-                        <th>ID Transaction</th>
-                        <th>Téléphone Receveur</th>
-                        <th>Date</th>
-                        <th>Montant</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($transactions as $transaction)
-                        <tr>
-                            <td>{{ $transaction->emetteur->nom }}</td>
-                            <td>{{ $transaction->emetteur->prenom }}</td>
-                            <td>{{ $transaction->receveur->nom }}</td>
-                            <td>{{ $transaction->receveur->prenom }}</td>
-                            <td>{{ $transaction->id }}</td>
-                            <td>{{ $transaction->receveur->telephone }}</td>
-                            <td>{{ $transaction->created_at->format('Y-m-d') }}</td>
-                            <td style="color: {{ $transaction->type == 'depot' ? 'green' : ($transaction->type == 'transfert' ? 'orange' : 'red') }};">
-                                {{ $transaction->type == 'depot' ? '+' : ($transaction->type == 'transfert' ? '' : '-') }}{{ number_format($transaction->montant, 2) }} FCFA
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#factureModalClient"
-                                        data-id="{{ $transaction->id }}"
-                                        data-nom-emetteur="{{ $transaction->emetteur->nom }}"
-                                        data-prenom-emetteur="{{ $transaction->emetteur->prenom }}"
-                                        data-nom-receveur="{{ $transaction->receveur->nom }}"
-                                        data-prenom-receveur="{{ $transaction->receveur->prenom }}"
-                                        data-telephone-receveur="{{ $transaction->receveur->telephone }}"
-                                        data-date="{{ $transaction->created_at->format('Y-m-d') }}"
-                                        data-montant="{{ number_format($transaction->montant, 2) }} FCFA">
-                                    Voir Facture
-                                </button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    
-        <!-- Pagination -->
-        <div class="pagination">
-            <a href="#" style="color: #2D60FF; text-decoration: none; margin-right: 10px;">
-                <i class="bi bi-arrow-left"></i> Précédent
-            </a>
-            <div style="margin: 0 10px;">
-                <a href="#" style="cursor: pointer; color: #2D60FF; text-decoration: none;">1</a>
-                <a href="#" style="cursor: pointer; margin: 0 5px; color: #2D60FF; text-decoration: none;">2</a>
-                <a href="#" style="cursor: pointer; margin: 0 5px; color: #2D60FF; text-decoration: none;">3</a>
-                <a href="#" style="cursor: pointer; margin: 0 5px; color: #2D60FF; text-decoration: none;">4</a>
-            </div>
-            <a href="#" style="color: #2D60FF; text-decoration: none; margin-left: 10px;">
-                Suivant <i class="bi bi-arrow-right"></i>
-            </a>
-        </div>
-
 
 <!-- Modal de transfert-->
 <div id="transferModal" class="modal" style="display:none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.5);">
