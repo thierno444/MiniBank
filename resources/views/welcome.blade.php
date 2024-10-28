@@ -72,7 +72,6 @@
 </head>
 <body>
     <div class="navbar">
-        <img src="chemin/vers/ton/logo.png" alt="Logo MiniBank" style="width: 150px; margin-bottom: 20px;">
         <h1>Bienvenue sur MiniBank</h1>
         <nav class="nav">
             @if (Route::has('login'))
