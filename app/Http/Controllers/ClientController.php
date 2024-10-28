@@ -28,7 +28,7 @@ class ClientController extends Controller
     // Récupérer les transactions où le client est le receveur ou l'émetteur
     $transactions = Transaction::where(function($query) use ($client) {
         $query->where('receveur_id', $client->id)
-              ->orWhere('emettteur_id', $client->id);
+              ->orWhere('emetteur_id', $client->id);
     })
     ->with('distributeur') // Charge les détails du distributeur
     ->orderBy('created_at', 'desc') // Tri par date décroissante

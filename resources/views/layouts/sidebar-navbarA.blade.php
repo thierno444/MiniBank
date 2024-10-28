@@ -221,7 +221,7 @@
                 
                 <p>Bienvenue sur ton tableau de bord {{ auth()->user()->prenom }} .</p>
                 <!-- Ajouter d'autres contenus ici -->
-                @yield('content')
+                @yield('containerAgent')
             </div>
         </div>
     </div>

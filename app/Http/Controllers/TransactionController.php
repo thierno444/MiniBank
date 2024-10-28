@@ -30,11 +30,11 @@ class TransactionController extends Controller
     
         // Créer la transaction
         $transaction = Transaction::create([
-            'emettteur_id' => $distributeur->id, // Distributeur comme émetteur
+            'emetteur_id' => $distributeur->id, // Distributeur comme émetteur
             'receveur_id' => $client->id, // Client comme receveur
             'distributeur_id' => $distributeur->id,
             'type' => 'depot',
-            'mountant' => $request->amount,
+            'montant' => $request->amount,
             'frais' => $request->amount * 0.01, // 1% de bonus
             'statut' => 'completed',
         ]);
@@ -73,11 +73,11 @@ class TransactionController extends Controller
     
         // Créer la transaction
         $transaction = Transaction::create([
-            'emettteur_id' => $client->id, // Client comme émetteur
+            'emetteur_id' => $client->id, // Client comme émetteur
             'receveur_id' => $distributeur->id, // Distributeur comme receveur
             'distributeur_id' => $distributeur->id,
             'type' => 'retrait',
-            'mountant' => $request->amount,
+            'montant' => $request->amount,
             'frais' => $request->amount * 0.01, // 1% de bonus
             'statut' => 'completed',
         ]);

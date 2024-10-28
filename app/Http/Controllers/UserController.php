@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Compte; // Assurez-vous que ce modèle existe
+use App\Models\Compte;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -32,35 +33,77 @@ class UserController extends Controller
         return redirect()->route('welcome')->with('success', 'Utilisateur créé avec succès.');
     }
 
-    // Méthode pour afficher un utilisateur
     public function show($id)
     {
-        $distributeur = User::find($id); // Récupère l'utilisateur par ID
+        $user = User::find($id);
 
-        if (!$distributeur) {
-            // Gérer le cas où l'utilisateur n'existe pas
+        if (!$user) {
             return response()->json(['error' => 'Utilisateur non trouvé'], 404);
         }
 
-        // Si l'utilisateur existe, retourner la vue ou les informations
-        return view('users.show', compact('distributeur'));
+        return view('users.show', compact('user'));
     }
 
-    // Méthode pour récupérer le compte d'un utilisateur
     public function getCompte($id)
     {
-        $distributeur = User::find($id);
+        $user = User::find($id);
 
-        if ($distributeur) {
-            $compte = Compte::where('user_id', $distributeur->id)->first();
-            
-            if ($compte) {
-                return response()->json($compte);
-            } else {
-                return response()->json(['error' => 'Compte non trouvé'], 404);
-            }
-        } else {
+        if (!$user) {
             return response()->json(['error' => 'Utilisateur non trouvé'], 404);
         }
+
+        $compte = Compte::where('user_id', $user->id)->first();
+
+        if ($compte) {
+            return response()->json($compte);
+        } else {
+            return response()->json(['error' => 'Compte non trouvé'], 404);
+        }
+    }
+
+    public function listUsers()
+    {
+        $agentId = Auth::id();
+
+        // Récupérer les clients et distributeurs actifs ayant effectué des transactions
+        $clientsActifs = User::where('role', 'client')
+            ->where('blocked', false)
+            ->whereHas('transactions', fn($q) => $q->where('agent_id', $agentId))
+            ->paginate(5, ['*'], 'clients_actifs');
+
+        $distributeursActifs = User::where('role', 'distributeur')
+            ->where('blocked', false)
+            ->whereHas('transactions', fn($q) => $q->where('agent_id', $agentId))
+            ->paginate(5, ['*'], 'distributeurs_actifs');
+
+        $clientsBloques = User::where('role', 'client')
+            ->where('blocked', true)
+            ->whereHas('transactions', fn($q) => $q->where('agent_id', $agentId))
+            ->paginate(5, ['*'], 'clients_bloques');
+
+        $distributeursBloques = User::where('role', 'distributeur')
+            ->where('blocked', true)
+            ->whereHas('transactions', fn($q) => $q->where('agent_id', $agentId))
+            ->paginate(5, ['*'], 'distributeurs_bloques');
+
+        return view('Agent.user', compact('clientsActifs', 'distributeursActifs', 'clientsBloques', 'distributeursBloques'));
+    }
+
+    public function blockUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->blocked = true;
+        $user->save();
+
+        return redirect()->route('agent.users')->with('success', 'Utilisateur bloqué.');
+    }
+
+    public function unblockUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->blocked = false;
+        $user->save();
+
+        return redirect()->route('agent.users')->with('success', 'Utilisateur débloqué.');
     }
 }

@@ -188,7 +188,7 @@
                                         <td>{{ $transaction->receveur->telephone }}</td>
                                         <td>{{ $transaction->created_at->format('Y-m-d') }}</td>
                                         <td class="{{ $transaction->type == 'depot' ? 'text-danger' : 'text-success' }}">
-                                            {{ $transaction->type == 'depot' ? '-' : '+' }}{{ number_format(abs($transaction->mountant), 2) }} FCFA
+                                            {{ $transaction->type == 'depot' ? '-' : '+' }}{{ number_format(abs($transaction->montant), 2) }} FCFA
                                         </td>
                                         <td>
                                             <button class="btn btn-link text-primary" data-bs-toggle="modal" 
@@ -198,7 +198,7 @@
                                                     data-prenom="{{ $transaction->receveur->prenom }}"
                                                     data-telephone="{{ $transaction->receveur->telephone }}"
                                                     data-date="{{ $transaction->created_at->format('Y-m-d') }}"
-                                                    data-montant="{{ number_format($transaction->mountant, 2) }} FCFA"
+                                                    data-montant="{{ number_format($transaction->montant, 2) }} FCFA"
                                                     data-type="{{ $transaction->type }}">
                                                 <i class="fas fa-file-invoice me-1"></i>
                                                 Voir Facture

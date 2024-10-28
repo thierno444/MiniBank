@@ -53,6 +53,19 @@ class User extends Authenticatable
         return strtoupper(substr($role, 0, 3)) . date('Y') . rand(1000, 9999);
     }
 
+// app/Models/User.php
+public function transactions()
+{
+    return $this->hasMany(Transaction::class, 'distributeur_id');
+}
+
+public function compte()
+{
+    return $this->hasOne(Compte::class, 'user_id');
+}
+
+
+
 }
 
 

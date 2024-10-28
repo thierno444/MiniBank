@@ -10,12 +10,12 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'emettteur_id',
+        'emetteur_id',
         'receveur_id',
         'distributeur_id',
         'agent_id',
         'type',
-        'mountant',
+        'montant',
         'frais',
         'annule',
         'statut',
@@ -25,7 +25,7 @@ class Transaction extends Model
     // Relations
     public function emetteur()
     {
-        return $this->belongsTo(User::class, 'emettteur_id');
+        return $this->belongsTo(User::class, 'emetteur_id');
     }
 
 
