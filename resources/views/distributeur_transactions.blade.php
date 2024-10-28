@@ -200,9 +200,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleButton = document.getElementById('toggleSolde');
     
     toggleButton.addEventListener('click', function() {
-        const isVisible = soldeElement.style.visibility !== 'hidden';
-        soldeElement.style.visibility = isVisible ? 'hidden' : 'visible';
-        toggleButton.innerHTML = isVisible ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+        soldeVisible = !soldeVisible;
+        soldeElement.style.visibility = soldeVisible ? 'visible' : 'hidden';
+        toggleButton.querySelector('i').className = soldeVisible ? 'fas fa-eye' : 'fas fa-eye-slash';
     });
 });
 </script>

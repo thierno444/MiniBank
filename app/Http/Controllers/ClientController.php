@@ -70,15 +70,15 @@ public function generateQrCode()
 }
 
 
-    public function search(Request $request)
+public function search(Request $request)
     {
-        $accountNumber = $request->input('account_number');
-    
-        // Rechercher le client dans la table users
-        $client = User::where('num_compte', $accountNumber)->first();
-    
+        $telephone = $request->input('telephone');
+
+        // Rechercher le client dans la table users par numéro de téléphone
+        $client = User::where('telephone', $telephone)->first();
+
         if ($client) {
-            return response()->json($client);
+            return response()->json($client); // Retourne toutes les informations du client
         } else {
             return response()->json(['error' => 'Client non trouvé'], 404);
         }

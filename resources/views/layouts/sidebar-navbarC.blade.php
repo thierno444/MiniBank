@@ -99,8 +99,8 @@
                     </button>
 
                     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-                        <form class="d-flex me-3">
-                            <input class="form-control me-2" type="search" placeholder="Recherche..." aria-label="Search">
+                        <form class="d-flex me-3" method="GET" action="{{ route('client.search') }}">
+                            <input class="form-control me-2" type="search" name="telephone" placeholder="Numéro de téléphone" aria-label="Search" required>
                             <button class="btn btn-outline-light" type="submit">
                                 <i class="bi bi-search"></i>
                             </button>
@@ -241,15 +241,51 @@
     </div>
 
     <script>
+document.querySelector('form.d-flex').addEventListener('submit', function(event) {
+    event.preventDefault(); // Empêche la soumission du formulaire
+
+    const telephone = event.target.telephone.value; // Récupère le numéro de téléphone saisi
+
+    // Envoi d'une requête fetch pour rechercher le client par numéro de téléphone
+    fetch(`/client/search?telephone=${telephone}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Client non trouvé');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Affiche les détails du client dans le modal
+            const clientDetails = document.getElementById('clientDetails');
+            clientDetails.innerHTML = `
+                <strong>Nom :</strong> ${data.nom}<br>
+                <strong>Prénom :</strong> ${data.prenom}<br>
+                <strong>Téléphone :</strong> ${data.telephone}<br>
+                <strong>Numéro de Compte :</strong> ${data.num_compte}<br>
+                <strong>Statut :</strong> ${data.blocked ? 'Bloqué' : 'Actif'}<br>
+            `;
+            // Ouvrir le modal
+            const clientModal = new bootstrap.Modal(document.getElementById('clientModal'));
+            clientModal.show();
+        })
+        .catch(error => {
+            alert(error.message); // Affiche un message d'erreur si le client n'est pas trouvé
+        });
+});
+
+
+
+
         window.addEventListener("pageshow", function(event) {
             var historyTraversal = event.persisted || 
-                                   (typeof window.performance != "undefined" && 
+                                   (typeof window.performance !== "undefined" && 
                                     window.performance.navigation.type === 2);
             if (historyTraversal) {
-                // Rechargement de la page à partir du serveur
                 window.location.reload();
             }
         });
+    </script>
+
         </script>
 
     <!-- Bootstrap JS -->
