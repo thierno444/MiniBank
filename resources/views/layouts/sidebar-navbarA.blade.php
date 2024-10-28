@@ -39,13 +39,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" style="font-size: 1.25rem; color: #505887;">
+                        <a class="nav-link" href="{{ route('transact') }}" style="font-size: 1.25rem; color: #505887;">
                             <i class="bi bi-card-list"></i>
                             Transactions
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" style="font-size: 1.25rem; color: #505887;">
+                        <a class="nav-link" href="{{ route('agent.users') }}" style="font-size: 1.25rem; color: #505887;">
                             <i class="bi bi-person"></i>
                             Gestion de Compte
                         </a>
@@ -221,7 +221,7 @@
                 
                 <p>Bienvenue sur ton tableau de bord {{ auth()->user()->prenom }} .</p>
                 <!-- Ajouter d'autres contenus ici -->
-                @yield('containerAgent')
+                @yield('content')
             </div>
         </div>
     </div>

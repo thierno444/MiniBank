@@ -34,7 +34,7 @@
                 @foreach ($transactions as $transaction)
                     <tr>
                         <td>{{ $transaction->created_at }}</td>
-                        <td>{{ $transaction->mountant }}</td>
+                        <td>{{ $transaction->montant }}</td>
                         <td>{{ $transaction->statut }}</td>
                         @php $distributeur = $transaction->distributeur; @endphp
                         <td>{{ $distributeur->nom }}</td>

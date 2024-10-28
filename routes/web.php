@@ -7,6 +7,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DepotController;
 
 // Route d'accueil
 Route::get('/', function () {
@@ -16,11 +17,16 @@ Route::get('/', function () {
 // Routes de connexion
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 // Routes d'utilisateurs
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 Route::get('/users/{id}/compte', [UserController::class, 'getCompte']);
+Route::get('/agent/users', [UserController::class, 'listUsers'])->name('agent.users');
+Route::post('/agent/user/{id}/block', [UserController::class, 'blockUser'])->name('user.block');
+Route::post('/agent/user/{id}/unblock', [UserController::class, 'unblockUser'])->name('user.unblock');
+Route::get('/agent/search-user', [UserController::class, 'searchUser'])->name('agent.searchUser');
 
 // Routes de transactions
 Route::post('/deposer', [TransactionController::class, 'deposer'])->name('deposer');
@@ -29,7 +35,6 @@ Route::post('/annuler-transaction', [TransactionController::class, 'annulerTrans
 Route::get('/distributeur-transactions', [TransactionController::class, 'index'])->name('distributeur.transactions');
 Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('transaction.show');
 Route::post('/transferer', [ClientController::class, 'transfer'])->name('transferer');
-
 
 // Routes pour les transactions clients
 Route::middleware('auth')->group(function () {
@@ -41,6 +46,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/client', [DashboardController::class, 'clientDashboard'])->name('dashboard.client');
     Route::get('/dashboard/agent', [DashboardController::class, 'agentDashboard'])->name('dashboard.agent');
     Route::get('/dashboard/distributeur', [DashboardController::class, 'distributeurDashboard'])->name('dashboard.distributeur');
+
+    Route::get('/dashboard/agent', [TransactionController::class, 'dashboard'])->name('dashboard.agent1');
+    
+    Route::get('/Agent/transactions', [TransactionController::class, 'agentTransactions'])->name('transact');
+    Route::get('/transactions/canceled', [TransactionController::class, 'canceledTransactions'])->name('transactions.canceled');
+    Route::get('/transaction/check-distributor', [TransactionController::class, 'showTransactionForm'])->name('transaction.checkDistributor');
+    Route::get('/transaction/create', [TransactionController::class, 'create'])->name('transaction.create');
+    Route::post('/transaction/store', [TransactionController::class, 'store'])->name('transaction.store');
+    Route::post('/transaction/cancel/{id}', [TransactionController::class, 'cancel'])->name('transaction.cancel');
+    Route::post('/transaction/retrait', [TransactionController::class, 'retirer'])->name('transaction.retrait');
+
+    Route::get('/dashboard/data', [UserController::class, 'getDashboardData'])->name('dashboard.data');
+    
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->middleware(['verified'])->name('dashboard');
@@ -63,7 +81,7 @@ Route::get('/transactions/{client_id}', [TransactionController::class, 'getTrans
 // Route pour générer un QR code
 Route::get('/generate-qr-code', [UserController::class, 'generateQrCode'])->middleware('auth');
 
-// Routes pour les sidebars (si nécessaires)
+// Routes pour les sidebars
 Route::get('/side-nav', function () {
     return view('layouts.sidebar-navbar'); // affichage sidebar et navbar
 });

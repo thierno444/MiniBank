@@ -28,7 +28,7 @@
                                 <!-- Affiche le nom et prénom du distributeur/client -->
                                 <strong>{{ $transaction->distributeur->nom }} {{ $transaction->distributeur->prenom }}</strong><br>
                                 <span class="{{ $transaction->type == 'depot' ? 'text-success' : 'text-danger' }}">
-                                    {{ $transaction->type == 'depot' ? '+' : '-' }}{{ abs($transaction->mountant) }}
+                                    {{ $transaction->type == 'depot' ? '+' : '-' }}{{ abs($transaction->montant) }}
                                 </span>
                             </div>
                             <span class="float-end">{{ $transaction->created_at->format('d/m/Y H:i') }}</span>

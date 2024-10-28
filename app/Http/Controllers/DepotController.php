@@ -41,7 +41,7 @@ class DepotController extends Controller
             'emettteur_id' => Auth::id(),
             'distributeur_id' => $distributeur->id,
             'type' => 'depot',
-            'mountant' => $request->montant,
+            'montant' => $request->montant,
             'agent_id' => Auth::id(),
             'statut' => 'completed',
         ]);
