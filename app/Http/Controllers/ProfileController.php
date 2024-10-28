@@ -61,11 +61,15 @@ class ProfileController extends Controller
 
         // Gestion de la photo de profil
         if ($request->hasFile('photo')) {
+            // Vérifie si l'utilisateur a déjà une photo
             if ($user->photo) {
-                Storage::disk('public')->delete($user->photo); // Supprimer l'ancienne image
+                // Supprime l'ancienne image du stockage
+                Storage::disk('public')->delete($user->photo);
             }
-            $user->photo = $request->file('photo')->store('photo', 'public'); // Sauvegarder la nouvelle image
+            // Sauvegarde la nouvelle image et met à jour le champ 'photo' de l'utilisateur
+            $user->photo = $request->file('photo')->store('photo', 'public');
         }
+        
 
         // Modification du mot de passe si rempli
         if ($request->filled('current_password') && $request->filled('password')) {

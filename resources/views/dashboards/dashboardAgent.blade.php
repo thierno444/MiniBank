@@ -22,14 +22,7 @@
                             </div>
                         </div>
                         <!-- QR Code -->
-                        <div class="col-md-5 text-center">
-                            <div class="bg-white p-2 rounded shadow-sm d-inline-block">
-                                <img id="qrCode" src="" alt="QR Code" class="img-fluid">
-                                <div class="mt-2">
-                                    <small class="text-primary">QR Code de compte</small>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div>
                 </div>
             </div>

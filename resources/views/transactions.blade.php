@@ -22,53 +22,49 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Mon Application</title>
         <div class="container-fluid py-4">
-            <!-- Carte principale et bouton de transfert -->
-            <div class="row g-4 mb-4">
-                <div class="col-12 col-lg-8">
-                    <div class="card border-0 shadow-lg h-100">
-                        <div class="card-body position-relative bg-gradient-custom text-white rounded">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="mb-4">
-                                        <h6 class="text-white-50 mb-2">Solde disponible</h6>
-                                        <div class="d-flex align-items-center">
-                                            <h3 class="mb-0">{{ number_format($compte->solde, 0) }} FCFA</h3>
-                                            <button class="btn btn-light btn-sm rounded-circle ms-2">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <h6 class="text-white-50 mb-2">Nom d'utilisateur</h6>
-                                        <h5 class="mb-0">{{ $client->prenom }} {{ $client->nom }}</h5>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-phone me-2"></i>
-                                        <span>{{ $client->telephone }}</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 text-center">
-                                    <div class="bg-white p-3 rounded shadow-sm">
-                                        <img src="{{ asset('images/num.png') }}" alt="QR Code" class="img-fluid" width="70">
-                                        <div class="mt-2">
-                                            <small class="text-primary">QR Code de compte</small>
-                                        </div>
-                                    </div>
-                                </div>
+<!-- Carte principale et bouton de transfert -->
+<div class="row g-4 mb-4">
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 shadow-lg h-100" style="max-width: 550px;"> <!-- Réduire la largeur de la carte -->
+            <div class="card-body position-relative bg-gradient-custom text-white rounded">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mb-4">
+                            <h6 class="text-white-50 mb-2">Solde disponible</h6>
+                            <div class="d-flex align-items-center">
+                                <h3 class="mb-0">{{ number_format($compte->solde, 0) }} FCFA</h3>
+                                <button class="btn btn-light btn-sm rounded-circle ms-2">
+                                    <i class="fas fa-eye"></i>
+                                </button>
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <h6 class="text-white-50 mb-2">Nom d'utilisateur</h6>
+                            <h5 class="mb-0">{{ $client->prenom }} {{ $client->nom }}</h5>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-phone me-2"></i>
+                            <span>{{ $client->telephone }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div class="bg-white p-0 rounded shadow-sm" style="display: flex; justify-content: center; align-items: center; height: 100%;"> <!-- Supprimer le padding -->
+                            <img id="qrCode" src="data:image/png;base64,{!! $qrCode !!}" alt="QR Code" style="max-width: 100%; height: auto; object-fit: cover;"/>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-lg-4">
-                    <div class="h-100 d-flex align-items-center">
-                        <button onclick="openModal()" class="btn btn-primary btn-lg w-100 transfer-button">
-                            <i class="fas fa-exchange-alt me-2"></i>
-                            Transférer
-                        </button>
-                        
-                    </div>
-                </div>
             </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-4 d-flex align-items-center">
+        <button onclick="openModal()" class="btn btn-primary btn-lg w-100 transfer-button">
+            <i class="fas fa-exchange-alt me-2"></i>
+            Transférer
+        </button>
+    </div>
+</div>
+
+
         
             <!-- Tableau des transactions -->
             <div class="card border-0 shadow-lg">

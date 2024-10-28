@@ -38,6 +38,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/client/transactions', [ClientController::class, 'index'])->name('client.transactions');
 });
 
+Route::post('/annuler-transaction/{id}', [TransactionController::class, 'annulerTransactionComptes'])->name('annuler-transaction');
+
+
 // Tableaux de bord
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/client', [DashboardController::class, 'clientDashboard'])->name('dashboard.client');

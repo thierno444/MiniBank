@@ -10,6 +10,8 @@ use App\Models\Transaction;
 use App\Models\TransactionAnnulation;
 use Exception;
 
+
+
 class TransactionController extends Controller
 {
     public function retirer(Request $request)
@@ -127,6 +129,64 @@ class TransactionController extends Controller
 
         return response()->json(['status' => 'success']);
     }
+
+    public function annulerTransactionComptes(Request $request, $id)
+{
+    try {
+        // Récupérer la transaction
+        $transaction = Transaction::findOrFail($id);
+        
+        // Récupérer les comptes de l'émetteur et du récepteur
+        $emetteurCompte = Compte::find($transaction->emettteur_id);
+        $receveurCompte = Compte::find($transaction->receveur_id);
+        
+        // Calcul des frais à rembourser
+        $frais = $transaction->frais;
+
+        // Logique pour remettre à jour les soldes
+        if ($transaction->type == 'depot') {
+            $emetteurCompte->solde -= $transaction->mountant; // Retirer le montant
+            $emetteurCompte->solde += $frais; // Ajouter les frais au solde
+        } elseif ($transaction->type == 'retrait') {
+            $emetteurCompte->solde += $transaction->mountant; // Ajouter le montant
+            $emetteurCompte->solde += $frais; // Ajouter les frais au solde
+        } elseif ($transaction->type == 'transfert') {
+            $emetteurCompte->solde += $transaction->mountant; // Ajouter le montant au solde de l'émetteur
+            $receveurCompte->solde -= $transaction->mountant; // Retirer le montant du solde du récepteur
+            $emetteurCompte->solde += $frais; // Rembourser les frais au client émetteur
+        }
+
+        // Sauvegarder les nouveaux soldes
+        $emetteurCompte->save();
+        if ($transaction->type == 'transfert') {
+            $receveurCompte->save();
+        }
+
+        // Enregistrer l'annulation dans la table des transactions
+        $annulationTransaction = new Transaction();
+        $annulationTransaction->emettteur_id = $transaction->emettteur_id;
+        $annulationTransaction->receveur_id = $transaction->receveur_id;
+        $annulationTransaction->distributeur_id = $transaction->distributeur_id; // ID du distributeur
+        $annulationTransaction->agent_id = $transaction->agent_id; // ID de l'agent (si applicable)
+        $annulationTransaction->type = 'annulation'; // Indiquer que c'est une annulation
+        $annulationTransaction->mountant = $transaction->mountant;
+        $annulationTransaction->frais = $frais; // Conserver les frais d'origine
+        $annulationTransaction->statut = 'completed'; // Statut de l'annulation
+        $annulationTransaction->save();
+
+        // Marquer la transaction originale comme annulée
+        $transaction->annule = true; // Mettre à jour le champ d'annulation
+        $transaction->save();
+
+        // Message de succès
+        return redirect()->back()->with('success', 'La transaction a été annulée avec succès.');
+
+    } catch (\Exception $e) {
+        // Message d'erreur
+        return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'annulation de la transaction.');
+    }
+}
+
 
     public function annulerTransaction($id)
     {

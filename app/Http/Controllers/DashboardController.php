@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Transaction;
 use App\Models\Compte;
 use Illuminate\Support\Facades\Auth;
+use SimpleSoftwareIO\QrCode\Facades\QrCode; // QrCode pour générer des codes QR
+
 
 class DashboardController extends Controller
 {
@@ -40,6 +42,10 @@ class DashboardController extends Controller
         // Obtenir le solde du client
         $solde = $compte->solde;
 
+        // Génération d'un code QR pour le numéro de compte du client
+        $qrCodeImage = QrCode::format('png')->size(200)->generate($client->num_compte);
+
+
         // Transactions pour le graphique
         $transactions = Transaction::where('emetteur_id', $client->id)
             ->orWhere('receveur_id', $client->id)
@@ -64,6 +70,8 @@ class DashboardController extends Controller
             'client' => $client,
             'recentTransactions' => $recentTransactions,
             'solde' => $solde,
+            'qrCode' => base64_encode($qrCodeImage), // Encodage du QR code en base64 pour affichage
+
             'plafondsCompte' => [
                 'solde_maximum' => $soldeMaximum,
                 'cumul_mensuel_maximum' => $cumulMensuelMaximum,

@@ -24,12 +24,7 @@
                             </div>
                         </div>
                         <div class="col-md-5 text-center">
-                            <div class="bg-white p-2 rounded shadow-sm d-inline-block">
-                                <img src="{{ asset('images/num.png') }}" alt="QR Code" class="img-fluid" width="50">
-                                <div class="mt-2">
-                                    <small class="text-primary">QR Code de compte</small>
-                                </div>
-                            </div>
+                          
                         </div>
                     </div>
                 </div>
@@ -139,13 +134,14 @@
             <i class="fas fa-file-invoice me-1"></i>
             Facture
         </button>
-        <button class="btn btn-danger btn-sm rounded-pill" 
-                data-bs-toggle="modal" 
-                data-bs-target="#annulationModal"
-                data-transaction-id="{{ $transaction->id }}">
-            <i class="fas fa-times me-1"></i>
-            Annuler
-        </button>
+        <form action="{{ route('annuler-transaction', $transaction->id) }}" method="POST" style="display: inline;">
+            @csrf
+            <button type="submit" class="btn btn-danger btn-sm rounded-pill">
+                <i class="fas fa-times me-1"></i>
+                Annuler
+            </button>
+        </form>
+        
     </td>
 </tr>
 @endforeach
@@ -386,31 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
           <!-- Modal d'Annulation -->
-        <div class="modal fade" id="annulationModal" tabindex="-1" aria-labelledby="annulationModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="annulationModalLabel">Annulation de la Transaction</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                    <form id="annulationForm" method="POST" action="{{ route('annuler.transaction') }}" >
-                        @csrf
-                        <div class="mb-3">
-                            <label for="numeroCompte" class="form-label">Numéro de Compte</label>
-                            <input type="text" class="form-control" name="numero_compte" id="numeroCompte" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="transactionId" class="form-label">ID de Transaction</label>
-                            <input type="text" class="form-control" name="transaction_id" id="transactionId" required>
-                        </div>
-                        <button type="submit" class="btn btn-danger">Annuler la Transaction</button>
-                    </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        
 
 
  <!-- Modal pour afficher les informations du client -->

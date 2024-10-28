@@ -42,11 +42,10 @@ class RegisteredUserController extends Controller
         ]);
 
         // Traitement de la photo
-        if ($request->hasFile('photo')) {
-            $path = $request->file('photo')->store('images', 'public'); // Stockage dans le dossier public/images
-        } else {
-            $path = 'images/default.png'; // Chemin vers l'image par défaut
-        }
+           // Traitement de la photo
+    $path = $request->hasFile('photo') 
+    ? $request->file('photo')->store('images', 'public') 
+    : 'images/default.png';
 
         // Créer l'utilisateur
         $user = User::create([
