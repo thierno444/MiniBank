@@ -101,10 +101,23 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <button class="btn btn-link text-primary">
-                                            <i class="fas fa-file-invoice me-1"></i>
-                                            Voir Facture
-                                        </button>
+                                        <button type="button" class="btn btn-link text-primary" 
+        data-bs-toggle="modal" 
+        data-bs-target="#factureModalClient"
+        data-id="{{ $transaction->id }}"
+        data-nom-emetteur="{{ $transaction->emetteur->nom }}"
+        data-prenom-emetteur="{{ $transaction->emetteur->prenom }}"
+        data-nom-receveur="{{ $transaction->receveur->nom }}"
+        data-prenom-receveur="{{ $transaction->receveur->prenom }}"
+        data-telephone-receveur="{{ $transaction->receveur->telephone }}"
+        data-date="{{ $transaction->created_at->format('Y-m-d') }}"
+        data-montant="{{ number_format($transaction->montant, 2) }} FCFA"
+        data-type="{{ $transaction->type }}">
+    <i class="fas fa-file-invoice me-1"></i>
+    Voir Facture
+</button>
+
+                                        
                                     </td>
                                 </tr>
                                 @endforeach

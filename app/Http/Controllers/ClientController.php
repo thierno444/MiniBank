@@ -126,7 +126,7 @@ class ClientController extends Controller
         'distributeur_id' => null, // Pas de distributeur dans ce cas
         'agent_id' => null, // Pas d'agent dans ce cas
         'type' => 'transfert',
-        'mountant' => $request->montant_envoye,
+        'montant' => $request->montant_envoye,
         'frais' => $frais,
         'statut' => 'completed',
     ]);

@@ -92,11 +92,20 @@
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="avatar-initial rounded-circle bg-primary-subtle text-primary me-2">
-                                        {{ substr($transaction->receveur->prenom, 0, 1) }}
+                                        @if ($transaction->receveur)
+                                            {{ substr($transaction->receveur->prenom, 0, 1) }}
+                                        @else
+                                            ?
+                                        @endif
                                     </div>
                                     <div>
-                                        <h6 class="mb-0">{{ $transaction->receveur->nom }}</h6>
-                                        <small class="text-muted">{{ $transaction->receveur->prenom }}</small>
+                                        @if ($transaction->receveur)
+                                            <h6 class="mb-0">{{ $transaction->receveur->nom }}</h6>
+                                            <small class="text-muted">{{ $transaction->receveur->prenom }}</small>
+                                        @else
+                                            <h6 class="mb-0">Receveur non trouvé</h6>
+                                            <small class="text-muted">N/A</small>
+                                        @endif
                                     </div>
                                 </div>
                             </td>
@@ -121,9 +130,9 @@
                                 <button class="btn btn-link text-primary" data-bs-toggle="modal" 
                                         data-bs-target="#factureModal" 
                                         data-id="{{ $transaction->id }}"
-                                        data-nom="{{ $transaction->receveur->nom }}"
-                                        data-prenom="{{ $transaction->receveur->prenom }}"
-                                        data-telephone="{{ $transaction->receveur->telephone }}"
+                                        data-nom="{{ $transaction->receveur ? $transaction->receveur->nom : 'N/A' }}"
+                                        data-prenom="{{ $transaction->receveur ? $transaction->receveur->prenom : 'N/A' }}"
+                                        data-telephone="{{ $transaction->receveur ? $transaction->receveur->telephone : 'N/A' }}"
                                         data-date="{{ $transaction->created_at->format('Y-m-d') }}"
                                         data-montant="{{ number_format($transaction->montant, 2) }} FCFA"
                                         data-type="{{ $transaction->type }}">
@@ -140,6 +149,7 @@
                             </td>
                         </tr>
                         @endforeach
+                        
                     </tbody>
                 </table>
             </div>
