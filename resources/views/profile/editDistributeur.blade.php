@@ -18,14 +18,17 @@
             <div class="bg-white rounded-lg shadow-lg p-6">
                 <div class="flex items-center space-x-4">
                     <div class="relative">
-                        <img id="currentPhoto" src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : '/api/placeholder/100/100' }}" 
-                             alt="Photo de profil" 
-                             class="w-24 h-24 rounded-full border-4 border-blue-500 object-cover">
-                        <label for="photo" class="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer">
-                            <i class="fas fa-camera text-white"></i>
-                            <input type="file" id="photo" name="photo" class="hidden" accept="image/*" onchange="previewImage(event)">
-                        </label>
-                    </div>
+                        <div class="relative">
+                            <img id="currentPhoto" src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : '/api/placeholder/100/100' }}" 
+                                 alt="Photo de profil" 
+                                 class="w-24 h-24 rounded-full border-4 border-blue-500 object-cover">
+                            <label for="photo" class="absolute bottom-0 right-0 bg-blue-500 rounded-full p-2 cursor-pointer">
+                                <i class="fas fa-camera text-white"></i>
+                                <input type="file" id="photo" name="photo" class="hidden" accept="image/*" onchange="previewImage(event)">
+                            </label>
+                            <img id="preview" class="w-24 h-24 rounded-full border-4 border-blue-500 object-cover hidden"> <!-- Prévisualisation -->
+                        </div>
+                        
                     <div>
                         <h1 class="text-2xl font-bold text-gray-800">{{ $user->prenom }} {{ $user->nom }}</h1>
                         <p class="text-gray-600">Membre depuis {{ $user->created_at->format('d/m/Y') }}</p>
@@ -201,20 +204,23 @@
         }
 
         function previewImage(event) {
-            const img = document.querySelector('img[alt="Profile"]'); // Image actuelle
-            const preview = document.getElementById('preview'); // Image de prévisualisation
-            const file = event.target.files[0];
-            
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Met à jour la source de l'image actuelle et de prévisualisation
-                    img.src = e.target.result; // Met à jour la source de l'image actuelle
-                    preview.src = e.target.result; // Met à jour l'aperçu
-                    preview.style.display = 'block'; // Affiche l'image de prévisualisation
-                }
-                reader.readAsDataURL(file);
-            }
+    const img = document.getElementById('currentPhoto'); // Image actuelle
+    const preview = document.getElementById('preview'); // Image de prévisualisation
+    const file = event.target.files[0];
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            img.src = e.target.result; // Met à jour la source de l'image actuelle
+            preview.src = e.target.result; // Met à jour l'aperçu
+            preview.style.display = 'block'; // Affiche l'image de prévisualisation
         }
+        reader.readAsDataURL(file);
+    } else {
+        // Si aucun fichier n'est sélectionné, masquer l'aperçu
+        preview.style.display = 'none';
+    }
+}
+
     </script>
         @endsection
