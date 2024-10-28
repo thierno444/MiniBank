@@ -1,6 +1,6 @@
-@extends('layouts.sideAndNav')
+@extends('layouts.sidebar-navbarA')
 
-@section('containerAgent')
+@section('content')
     <div class="container">
         <h1>Liste des Utilisateurs</h1>
 

@@ -111,7 +111,7 @@
                 <h1>Dashboard Agent</h1>
                 <p>Bienvenue sur le tableau de bord de MiniBank.</p>
                 <!-- Ajouter d'autres contenus ici -->
-                @yield('containerAgent')
+               
             </div>
         </div>
     </div>

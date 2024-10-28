@@ -7,9 +7,24 @@ use App\Models\User;
 use App\Models\Compte;
 use App\Models\Transaction;
 use App\Events\TransactionNotification;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
+
+    public function agentTransactions()
+{
+    // Récupérer les transactions paginées de l'agent connecté, 5 par page
+    $transactions = Transaction::where('agent_id', Auth::id())
+        ->with('distributeur')
+        ->orderBy('created_at', 'desc')
+        ->paginate(5);
+
+
+
+    return view('Agent.transactions', compact('transactions'));
+
+}
     public function deposer(Request $request)
     {
         // Validation des données

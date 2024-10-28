@@ -2,7 +2,6 @@
 @section('content')
 
 
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>

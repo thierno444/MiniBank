@@ -1,6 +1,6 @@
 @extends('layouts.sidebar-navbarC')
 
-@section('containerC')
+@section('content')
 <div class="container mt-3" style="background-color: #E5E5E5; padding: 20px; border-radius: 8px;">
     <!-- Section du solde -->
     <div class="row">

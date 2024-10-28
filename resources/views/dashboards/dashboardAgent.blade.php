@@ -1,7 +1,7 @@
 @extends('layouts.sidebar-navbarA')
 
 
-@section('containerAgent')
+@section('content')
 <div class="row">
     <!-- Carte pour afficher les informations de l'agent -->
     <div class="col-md-4 mb-4">
@@ -60,7 +60,7 @@
     </div>
 </div>
 </div>
-@endsection
+
 
 <!-- Ajoutez ce script pour inclure Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -118,3 +118,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+@endsection

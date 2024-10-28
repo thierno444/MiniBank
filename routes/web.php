@@ -28,6 +28,8 @@ Route::post('/retirer', [TransactionController::class, 'retirer'])->name('retire
 Route::post('/annuler-transaction', [TransactionController::class, 'annulerTransaction'])->name('annuler.transaction');
 Route::get('/distributeur-transactions', [TransactionController::class, 'index'])->name('distributeur.transactions');
 Route::get('/transaction/{id}', [TransactionController::class, 'show'])->name('transaction.show');
+Route::post('/transferer', [ClientController::class, 'transfer'])->name('transferer');
+
 
 // Routes pour les transactions clients
 Route::middleware('auth')->group(function () {
