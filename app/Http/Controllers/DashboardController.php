@@ -76,9 +76,12 @@ class DashboardController extends Controller
 
     public function agentDashboard()
     {
+        $transactions = Transaction::where('user_id', auth()->id())->get(); // or however you're fetching transactions
+        
         return view('dashboards.dashboardAgent');
     }
-
+    
+    
     public function distributeurDashboard()
     {
         $distributeur = Auth::user();

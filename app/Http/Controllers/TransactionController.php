@@ -212,7 +212,7 @@ class TransactionController extends Controller
                 $query->select('id', 'nom', 'prenom', 'num_compte', 'carte_identite');
             }])->get();
 
-        return view('Agent.annulations', compact('transact'));
+        return view('Agent.annulations', compact('transactions'));
     }
 
     public function cancel($id)

@@ -1,6 +1,6 @@
-@extends('layouts.sideAndNav')
+@extends('layouts.sidebar-navbarA')
 
-@section('containerAgent')
+@section('content')
 
 <div class="container mt-5">
     <h1 class="mb-3">Transactions de l'Agent</h1>
