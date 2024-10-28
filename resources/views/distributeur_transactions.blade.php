@@ -1,249 +1,212 @@
 @extends('layouts.sidebar-navbarD')
+
 @section('content')
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interface Bancaire</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-       .modal-lg { 
-    max-width: 800px;
-}
-
-.company-header {
-    text-align: center;
-    border-bottom: 2px solid #f0f0f0;
-    padding-bottom: 1rem;
-}
-
-.company-name {
-    color: #2c3e50;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.company-details {
-    color: #666;
-    margin-bottom: 0;
-}
-
-.info-group {
-    background-color: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-    height: 100%;
-}
-
-.info-title {
-    color: #2c3e50;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #e9ecef;
-}
-
-.info-content p {
-    margin-bottom: 0.5rem;
-}
-
-.transaction-details {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.05);
-}
-
-.table th {
-    background-color: #f8f9fa;
-    color: #2c3e50;
-    font-weight: 600;
-}
-
-.footer-note {
-    border-top: 1px solid #f0f0f0;
-    padding-top: 1rem;
-}
-
-@media print {
-    .modal-footer {
-        display: none;
-    }
-    .btn-close {
-        display: none;
-    }
-    .modal {
-        position: absolute;
-        left: 0;
-        top: 0;
-        margin: 0;
-        padding: 0;
-        overflow: visible!important;
-    }
-}
-
-/* Styles du second code */
-.card {
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.action-button {
-    border-radius: 30px;
-    padding: 1.5rem;
-    transition: transform 0.2s;
-}
-
-.action-button:hover {
-    transform: translateY(-2px);
-}
-
-.balance-card {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-}
-
-.transaction-row:hover {
-    background-color: #f8f9fa;
-}
-
-.card-number {
-    letter-spacing: 2px;
-}
-
-.pagination .page-link {
-    border-radius: 50%;
-    margin: 0 3px;
-    width: 35px;
-    height: 35px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-    </style>
-</head>
-<body class="bg-light">
-    <div class="container-fluid py-4">
-        <div class="row">
-            <!-- Carte bancaire -->
-            <div class="col-md-4">
-                <h2 class="mb-4">Ma carte</h2>
-                <div class="card balance-card mb-4">
-                    <div class="card-body">
-                        <h6 class="text-muted">Solde</h6>
-                        <h3 class="mb-4">{{ $compte ? number_format($compte->solde, 2) : '0.00' }} FCFA</h3>
-                        
-                        <h6 class="text-muted">Nom d'utilisateur</h6>
-                        <h5 class="mb-4">{{ $user->prenom }} {{ $user->nom }}</h5>
-                        
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="card-number mb-0">{{ $user->telephone }}</h5>
-                            <img src="{{ asset('images/num.png') }}" alt="Icon" width="50">
+<div class="container-fluid py-4">
+    <div class="row g-4 mb-4">
+        <!-- Carte du solde principal -->
+        <div class="col-12 col-md-6">
+            <div class="card border-0 shadow-lg h-100">
+                <div class="card-body position-relative bg-gradient-primary text-white rounded">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h6 class="text-white-50 mb-3">
+                                <i class="fas fa-wallet me-2"></i>Solde disponible
+                            </h6>
+                            <div class="d-flex align-items-center mb-3">
+                                <h3 class="mb-4">{{ $compte ? number_format($compte->solde, 2) : '0.00' }} FCFA</h3>
+                                <button class="btn btn-light btn-sm rounded-circle" id="toggleSolde">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-hashtag me-2"></i>
+                                <span>{{ $user->telephone }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-5 text-center">
+                            <div class="bg-white p-2 rounded shadow-sm d-inline-block">
+                                <img src="{{ asset('images/num.png') }}" alt="QR Code" class="img-fluid" width="50">
+                                <div class="mt-2">
+                                    <small class="text-primary">QR Code de compte</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Boutons d'action -->
-                <div class="d-grid gap-3">
-                    <button class="btn btn-primary action-button d-flex align-items-center justify-content-center" 
-                            data-bs-toggle="modal" data-bs-target="#depositModal">
-                        <i class="fas fa-arrow-down me-2"></i>
-                        Dépôt
-                    </button>
-                    
-                    <button class="btn btn-success action-button d-flex align-items-center justify-content-center" 
-                            data-bs-toggle="modal" data-bs-target="#withdrawalModal">
-                        <i class="fas fa-arrow-up me-2"></i>
-                        Retrait
-                    </button>
                 </div>
             </div>
+        </div>
 
-            <!-- Liste des transactions -->
-            <div class="col-md-8">
-                <h2 class="mb-4">Liste des Transactions</h2>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <th>Prénom</th>
-                                        <th>ID Transaction</th>
-                                        <th>Téléphone</th>
-                                        <th>Date</th>
-                                        <th>Montant</th>
-                                        <th>Facture</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($transactions as $transaction)
-                                    <tr class="transaction-row">
-                                        <td>{{ $transaction->receveur->nom }}</td>
-                                        <td>{{ $transaction->receveur->prenom }}</td>
-                                        <td>{{ $transaction->id }}</td>
-                                        <td>{{ $transaction->receveur->telephone }}</td>
-                                        <td>{{ $transaction->created_at->format('Y-m-d') }}</td>
-                                        <td class="{{ $transaction->type == 'depot' ? 'text-danger' : 'text-success' }}">
-                                            {{ $transaction->type == 'depot' ? '-' : '+' }}{{ number_format(abs($transaction->montant), 2) }} FCFA
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-link text-primary" data-bs-toggle="modal" 
-                                                    data-bs-target="#factureModal" 
-                                                    data-id="{{ $transaction->id }}"
-                                                    data-nom="{{ $transaction->receveur->nom }}"
-                                                    data-prenom="{{ $transaction->receveur->prenom }}"
-                                                    data-telephone="{{ $transaction->receveur->telephone }}"
-                                                    data-date="{{ $transaction->created_at->format('Y-m-d') }}"
-                                                    data-montant="{{ number_format($transaction->montant, 2) }} FCFA"
-                                                    data-type="{{ $transaction->type }}">
-                                                <i class="fas fa-file-invoice me-1"></i>
-                                                Voir Facture
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm rounded-pill" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#annulationModal"
-                                                    data-transaction-id="{{ $transaction->id }}">
-                                                <i class="fas fa-times me-1"></i>
-                                                Annulation
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                        <!-- Pagination -->
-                        <nav aria-label="Page navigation" class="mt-4">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </a>
-                                </li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+        <!-- Carte des actions rapides -->
+        <div class="col-12 col-md-6">
+            <div class="card border-0 shadow-lg h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <h6 class="mb-0 text-primary">
+                        <i class="fas fa-bolt me-2"></i>Actions Rapides
+                    </h6>
+                </div>
+                <div class="card-body d-flex justify-content-around">
+                    <button class="btn btn-primary d-flex flex-column align-items-center p-3 rounded-3" 
+                            data-bs-toggle="modal" data-bs-target="#depositModal">
+                        <i class="fas fa-arrow-down mb-2 fa-2x"></i>
+                        <span>Dépôt</span>
+                    </button>
+                    <button class="btn btn-success d-flex flex-column align-items-center p-3 rounded-3" 
+                            data-bs-toggle="modal" data-bs-target="#withdrawalModal">
+                        <i class="fas fa-arrow-up mb-2 fa-2x"></i>
+                        <span>Retrait</span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Transactions récentes -->
+    <div class="card border-0 shadow-lg mb-4">
+        <div class="card-header bg-white border-0 py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 text-primary">
+                    <i class="fas fa-exchange-alt me-2"></i>Transactions Récentes
+                </h6>
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-outline-primary active">Aujourd'hui</button>
+                    <button class="btn btn-sm btn-outline-primary">Cette semaine</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="border-0">Bénéficiaire</th>
+                            <th class="border-0">Montant</th>
+                            <th class="border-0">Date & Heure</th>
+                            <th class="border-0">Type</th>
+                            <th class="border-0">Statut</th>
+                            <th class="border-0">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($transactions as $transaction)
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-initial rounded-circle bg-primary-subtle text-primary me-2">
+                                        {{ substr($transaction->receveur->prenom, 0, 1) }}
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">{{ $transaction->receveur->nom }}</h6>
+                                        <small class="text-muted">{{ $transaction->receveur->prenom }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="{{ $transaction->type == 'depot' ? 'text-danger' : 'text-success' }}">
+                                    {{ $transaction->type == 'depot' ? '-' : '+' }}{{ number_format(abs($transaction->montant), 2) }} FCFA
+                                </span>
+                            </td>
+                            <td>
+                                <div>{{ $transaction->created_at->format('d/m/Y') }}</div>
+                                <small class="text-muted">{{ $transaction->created_at->format('H:i:s') }}</small>
+                            </td>
+                            <td>
+                                <span class="badge {{ $transaction->type == 'depot' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
+                                    {{ ucfirst($transaction->type) }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge bg-success">Complété</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-link text-primary" data-bs-toggle="modal" 
+                                        data-bs-target="#factureModal" 
+                                        data-id="{{ $transaction->id }}"
+                                        data-nom="{{ $transaction->receveur->nom }}"
+                                        data-prenom="{{ $transaction->receveur->prenom }}"
+                                        data-telephone="{{ $transaction->receveur->telephone }}"
+                                        data-date="{{ $transaction->created_at->format('Y-m-d') }}"
+                                        data-montant="{{ number_format($transaction->montant, 2) }} FCFA"
+                                        data-type="{{ $transaction->type }}">
+                                    <i class="fas fa-file-invoice me-1"></i>
+                                    Facture
+                                </button>
+                                <button class="btn btn-danger btn-sm rounded-pill" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#annulationModal"
+                                        data-transaction-id="{{ $transaction->id }}">
+                                    <i class="fas fa-times me-1"></i>
+                                    Annuler
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(45deg, #4e73df, #224abe);
+    }
+    
+    .avatar-initial {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+    }
+    
+    .progress {
+        background-color: #edf2f9;
+    }
+    
+    .table > :not(caption) > * > * {
+        padding: 1rem;
+    }
+
+    .card {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .btn-group .btn {
+        border-radius: 20px;
+    }
+
+    .badge {
+        padding: 0.5em 1em;
+        border-radius: 20px;
+    }
+
+    .btn-primary, .btn-success {
+        border-radius: 10px;
+        transition: transform 0.2s;
+    }
+
+    .btn-primary:hover, .btn-success:hover {
+        transform: translateY(-2px);
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Gestion de la visibilité du solde
+    const soldeElement = document.getElementById('solde');
+    const toggleButton = document.getElementById('toggleSolde');
+    
+    toggleButton.addEventListener('click', function() {
+        const isVisible = soldeElement.style.visibility !== 'hidden';
+        soldeElement.style.visibility = isVisible ? 'hidden' : 'visible';
+        toggleButton.innerHTML = isVisible ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+    });
+});
+</script>
+    
     <!-- Les modals restent les mêmes mais avec des styles Bootstrap améliorés -->
               
         <!-- Modal pour le dépôt -->

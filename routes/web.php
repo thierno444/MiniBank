@@ -47,7 +47,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/agent', [DashboardController::class, 'agentDashboard'])->name('dashboard.agent');
     Route::get('/dashboard/distributeur', [DashboardController::class, 'distributeurDashboard'])->name('dashboard.distributeur');
 
-    Route::get('/dashboard/agent', [TransactionController::class, 'dashboard'])->name('dashboard.agent1');
+
     
     Route::get('/Agent/transactions', [TransactionController::class, 'agentTransactions'])->name('transactions');
     Route::get('/transactions/canceled', [TransactionController::class, 'canceledTransactions'])->name('transactions.canceled');

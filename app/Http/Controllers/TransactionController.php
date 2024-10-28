@@ -28,7 +28,7 @@ class TransactionController extends Controller
         }
 
         Transaction::create([
-            'emettteur_id' => $distributeur->id,
+            'emetteur_id' => $distributeur->id,
             'receveur_id' => $client->id,
             'distributeur_id' => $distributeur->id,
             'type' => 'depot',

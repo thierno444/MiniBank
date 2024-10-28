@@ -38,7 +38,7 @@ class DepotController extends Controller
 
         // Enregistrer la transaction
         Transaction::create([
-            'emettteur_id' => Auth::id(),
+            'emetteur_id' => Auth::id(),
             'distributeur_id' => $distributeur->id,
             'type' => 'depot',
             'montant' => $request->montant,

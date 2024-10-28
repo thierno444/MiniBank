@@ -41,7 +41,7 @@ class ClientController extends Controller
         // Récupérer les transactions du client
         $transactions = Transaction::where(function($query) use ($client) {
                 $query->where('receveur_id', $client->id)
-                      ->orWhere('emettteur_id', $client->id);
+                      ->orWhere('emetteur_id', $client->id);
             })
             ->with('distributeur')
             ->orderBy('created_at', 'desc')
@@ -121,7 +121,7 @@ class ClientController extends Controller
 
     // Créer la transaction pour le transfert
     Transaction::create([
-        'emettteur_id' => auth()->user()->id,
+        'emetteur_id' => auth()->user()->id,
         'receveur_id' => $receveur->user_id,
         'distributeur_id' => null, // Pas de distributeur dans ce cas
         'agent_id' => null, // Pas d'agent dans ce cas
