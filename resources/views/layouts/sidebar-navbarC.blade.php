@@ -235,7 +235,7 @@
             <div class="container mt-4">
                 <p>Bienvenue sur ton tableau de bord {{ auth()->user()->prenom }} .</p>
                 <!-- Ajouter d'autres contenus ici -->
-                @yield('contentC')
+                @yield('content')
             </div>
         </div>
     </div>

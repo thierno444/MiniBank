@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard/agent', [TransactionController::class, 'dashboard'])->name('dashboard.agent1');
     
-    Route::get('/Agent/transactions', [TransactionController::class, 'agentTransactions'])->name('transact');
+    Route::get('/Agent/transactions', [TransactionController::class, 'agentTransactions'])->name('transactions');
     Route::get('/transactions/canceled', [TransactionController::class, 'canceledTransactions'])->name('transactions.canceled');
     Route::get('/transaction/check-distributor', [TransactionController::class, 'showTransactionForm'])->name('transaction.checkDistributor');
     Route::get('/transaction/create', [TransactionController::class, 'create'])->name('transaction.create');
@@ -63,6 +63,10 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->middleware(['verified'])->name('dashboard');
 });
+
+Route::get('/api/dashboard-data/{period}', [DashboardController::class, 'getChartDataByPeriod']);
+Route::get('/api/dashboard-data/refresh', [DashboardController::class, 'refreshDashboardData']);
+
 
 // Routes de profil
 Route::middleware('auth')->group(function () {

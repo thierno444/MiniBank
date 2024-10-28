@@ -39,7 +39,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('transact') }}" style="font-size: 1.25rem; color: #505887;">
+                        <a class="nav-link" href="{{ route('transactions') }}" style="font-size: 1.25rem; color: #505887;">
                             <i class="bi bi-card-list"></i>
                             Transactions
                         </a>
