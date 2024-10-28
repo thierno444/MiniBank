@@ -12,6 +12,49 @@ use Exception;
 
 class TransactionController extends Controller
 {
+    public function retirer(Request $request)
+    {
+        // Validation des données
+        $request->validate([
+            'account_number' => 'required|exists:users,num_compte',
+            'amount' => 'required|numeric|min:1',
+        ]);
+    
+        // Récupérer l'utilisateur (client) par numéro de compte
+        $client = User::where('num_compte', $request->account_number)->first();
+        $distributeur = auth()->user(); // L'utilisateur connecté (distributeur)
+    
+        // Vérifiez le solde du client
+        $clientCompte = Compte::where('user_id', $client->id)->first();
+        if ($clientCompte->solde < $request->amount) {
+            return redirect()->back()->withErrors(['error' => 'Solde insuffisant pour effectuer ce retrait.']);
+        }
+    
+        // Créer la transaction
+        $transaction = Transaction::create([
+            'emetteur_id' => $client->id, // Client comme émetteur
+            'receveur_id' => $distributeur->id, // Distributeur comme receveur
+            'distributeur_id' => $distributeur->id,
+            'type' => 'retrait',
+            'montant' => $request->amount,
+            'frais' => $request->amount * 0.01, // 1% de bonus
+            'statut' => 'completed',
+        ]);
+    
+        // Mettre à jour le solde du client
+        $clientCompte->updateSolde(-$request->amount); // Soustraction du montant du solde du client
+    
+        // Mettre à jour le solde du distributeur
+        $bonus = $request->amount * 0.01; // Calcul du bonus de 1%
+        $distributeurCompte = Compte::where('user_id', $distributeur->id)->first();
+        $distributeurCompte->updateSolde($request->amount + $bonus); // Ajout du montant et du bonus au solde du distributeur
+    
+        // Rediriger avec un message de succès
+        return redirect()->back()->with('success', 'Retrait effectué avec succès !');
+    }
+
+
+
     public function deposer(Request $request)
     {
         $request->validate([
@@ -46,7 +89,7 @@ class TransactionController extends Controller
         return redirect()->back()->with('success', 'Dépôt effectué avec succès !');
     }
 
-    public function retirer(Request $request)
+    public function retirerAgent(Request $request)
     {
         $request->validate([
             'telephone' => 'required|string',
@@ -88,38 +131,50 @@ class TransactionController extends Controller
     public function annulerTransaction($id)
     {
         $transaction = Transaction::find($id);
-
+    
         if (!$transaction || $transaction->annule || $transaction->expires_at < now()) {
             throw new Exception("La transaction ne peut pas être annulée.");
         }
-
+    
+        // Marquer la transaction comme annulée
         $transaction->update(['annule' => true, 'statut' => 'annulé']);
+    
+        // Récupérer les utilisateurs associés
         $emetteur = $transaction->emetteur;
         $receveur = $transaction->receveur;
         $distributeur = $transaction->distributeur;
-
+    
+        // Récupérer les comptes
         $compteDistributeur = Compte::where('user_id', $distributeur->id)->first();
-        
+        $compteEmetteur = Compte::where('user_id', $emetteur->id)->first();
+        $compteReceveur = Compte::where('user_id', $receveur->id)->first();
+    
         if ($transaction->type === 'transfert') {
             $montant = $transaction->montant;
-            $compteEmetteur = Compte::where('user_id', $emetteur->id)->first();
-            $compteReceveur = Compte::where('user_id', $receveur->id)->first();
-            $compteEmetteur->increment('solde', $montant);
-            $compteReceveur->decrement('solde', $montant);
+            if ($compteEmetteur && $compteReceveur) {
+                $compteEmetteur->increment('solde', $montant);
+                $compteReceveur->decrement('solde', $montant);
+            }
         } elseif ($transaction->type === 'depot') {
             $montant = $transaction->montant;
             $bonus = $montant * 0.01;
-            $compteDistributeur->decrement('solde', $montant + $bonus);
+            if ($compteDistributeur) {
+                $compteDistributeur->decrement('solde', $montant + $bonus);
+            }
         } elseif ($transaction->type === 'retrait') {
             $montant = $transaction->montant;
             $bonus = $montant * 0.01;
-            $compteReceveur = Compte::where('user_id', $receveur->id)->first();
-            $compteReceveur->decrement('solde', $montant);
-            $compteDistributeur->decrement('solde', $bonus);
+            if ($compteReceveur) {
+                $compteReceveur->decrement('solde', $montant);
+            }
+            if ($compteDistributeur) {
+                $compteDistributeur->decrement('solde', $bonus);
+            }
         }
-
+    
         return response()->json(['message' => 'Transaction annulée avec succès.'], 200);
     }
+    
 
     public function index()
     {

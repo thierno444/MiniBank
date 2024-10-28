@@ -52,7 +52,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/transaction/create', [TransactionController::class, 'create'])->name('transaction.create');
     Route::post('/transaction/store', [TransactionController::class, 'store'])->name('transaction.store');
     Route::post('/transaction/cancel/{id}', [TransactionController::class, 'cancel'])->name('transaction.cancel');
-    Route::post('/transaction/retrait', [TransactionController::class, 'retirer'])->name('transaction.retrait');
+    Route::post('/transaction/retrait', [TransactionController::class, 'retirerAgent'])->name('transaction.retrait');
+    Route::post('/transaction/annuler/{id}', [TransactionController::class, 'annulerTransaction'])->name('transaction.annuler');
+
+
+
 
     Route::get('/agent/users', [UserController::class, 'listUsers'])->name('agent.users');
 Route::post('/agent/user/{id}/block', [UserController::class, 'blockUser'])->name('user.block');

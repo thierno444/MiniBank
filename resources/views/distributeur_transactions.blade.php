@@ -87,69 +87,69 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($transactions as $transaction)
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar-initial rounded-circle bg-primary-subtle text-primary me-2">
-                                        @if ($transaction->receveur)
-                                            {{ substr($transaction->receveur->prenom, 0, 1) }}
-                                        @else
-                                            ?
-                                        @endif
-                                    </div>
-                                    <div>
-                                        @if ($transaction->receveur)
-                                            <h6 class="mb-0">{{ $transaction->receveur->nom }}</h6>
-                                            <small class="text-muted">{{ $transaction->receveur->prenom }}</small>
-                                        @else
-                                            <h6 class="mb-0">Receveur non trouvé</h6>
-                                            <small class="text-muted">N/A</small>
-                                        @endif
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="{{ $transaction->type == 'depot' ? 'text-danger' : 'text-success' }}">
-                                    {{ $transaction->type == 'depot' ? '-' : '+' }}{{ number_format(abs($transaction->montant), 2) }} FCFA
-                                </span>
-                            </td>
-                            <td>
-                                <div>{{ $transaction->created_at->format('d/m/Y') }}</div>
-                                <small class="text-muted">{{ $transaction->created_at->format('H:i:s') }}</small>
-                            </td>
-                            <td>
-                                <span class="badge {{ $transaction->type == 'depot' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
-                                    {{ ucfirst($transaction->type) }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="badge bg-success">Complété</span>
-                            </td>
-                            <td>
-                                <button class="btn btn-link text-primary" data-bs-toggle="modal" 
-                                        data-bs-target="#factureModal" 
-                                        data-id="{{ $transaction->id }}"
-                                        data-nom="{{ $transaction->receveur ? $transaction->receveur->nom : 'N/A' }}"
-                                        data-prenom="{{ $transaction->receveur ? $transaction->receveur->prenom : 'N/A' }}"
-                                        data-telephone="{{ $transaction->receveur ? $transaction->receveur->telephone : 'N/A' }}"
-                                        data-date="{{ $transaction->created_at->format('Y-m-d') }}"
-                                        data-montant="{{ number_format($transaction->montant, 2) }} FCFA"
-                                        data-type="{{ $transaction->type }}">
-                                    <i class="fas fa-file-invoice me-1"></i>
-                                    Facture
-                                </button>
-                                <button class="btn btn-danger btn-sm rounded-pill" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#annulationModal"
-                                        data-transaction-id="{{ $transaction->id }}">
-                                    <i class="fas fa-times me-1"></i>
-                                    Annuler
-                                </button>
-                            </td>
-                        </tr>
-                        @endforeach
-                        
+                     @foreach ($transactions as $transaction)
+<tr>
+    <td>
+        <div class="d-flex align-items-center">
+            <div class="avatar-initial rounded-circle bg-primary-subtle text-primary me-2">
+                @if ($transaction->receveur)
+                    {{ substr($transaction->receveur->prenom, 0, 1) }}
+                @else
+                    ?
+                @endif
+            </div>
+            <div>
+                @if ($transaction->receveur)
+                    <h6 class="mb-0">{{ $transaction->receveur->nom }}</h6>
+                    <small class="text-muted">{{ $transaction->receveur->prenom }}</small>
+                @else
+                    <h6 class="mb-0">Receveur non trouvé</h6>
+                    <small class="text-muted">N/A</small>
+                @endif
+            </div>
+        </div>
+    </td>
+    <td>
+        <span class="{{ $transaction->type == 'depot' ? 'text-danger' : 'text-success' }}">
+            {{ $transaction->type == 'depot' ? '-' : '+' }}{{ number_format(abs($transaction->montant), 2) }} FCFA
+        </span>
+    </td>
+    <td>
+        <div>{{ $transaction->created_at->format('d/m/Y') }}</div>
+        <small class="text-muted">{{ $transaction->created_at->format('H:i:s') }}</small>
+    </td>
+    <td>
+        <span class="badge {{ $transaction->type == 'depot' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger' }}">
+            {{ ucfirst($transaction->type) }}
+        </span>
+    </td>
+    <td>
+        <span class="badge bg-success">Complété</span>
+    </td>
+    <td>
+        <button class="btn btn-link text-primary" data-bs-toggle="modal" 
+                data-bs-target="#factureModal" 
+                data-id="{{ $transaction->id }}"
+                data-nom="{{ $transaction->receveur ? $transaction->receveur->nom : 'N/A' }}"
+                data-prenom="{{ $transaction->receveur ? $transaction->receveur->prenom : 'N/A' }}"
+                data-telephone="{{ $transaction->receveur ? $transaction->receveur->telephone : 'N/A' }}"
+                data-date="{{ $transaction->created_at->format('Y-m-d') }}"
+                data-montant="{{ number_format($transaction->montant, 2) }} FCFA"
+                data-type="{{ $transaction->type }}">
+            <i class="fas fa-file-invoice me-1"></i>
+            Facture
+        </button>
+        <button class="btn btn-danger btn-sm rounded-pill" 
+                data-bs-toggle="modal" 
+                data-bs-target="#annulationModal"
+                data-transaction-id="{{ $transaction->id }}">
+            <i class="fas fa-times me-1"></i>
+            Annuler
+        </button>
+    </td>
+</tr>
+@endforeach
+
                     </tbody>
                 </table>
             </div>
@@ -495,66 +495,60 @@ document.getElementById('depositForm').addEventListener('submit', function(event
 
 
 
-document.getElementById('withdrawalAccount').addEventListener('input', function() {
-                const accountNumber = this.value;
 
-                if (accountNumber.length >= 5) { // Vérifiez si le numéro de compte est valide
-                    fetch(`/api/get-account-info/${accountNumber}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (!data.success) {
-                                alert(data.message); // Affichez le message d'erreur
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Erreur lors de la récupération des informations :', error);
-                        });
-                }
-            });
-
-            document.getElementById('withdrawalForm').addEventListener('submit', function(event) {
-                const amount = parseFloat(document.getElementById('withdrawalAmount').value);
-                const withdrawalErrorMessage = document.getElementById('withdrawalErrorMessage');
-                const withdrawalBalanceErrorMessage = document.getElementById('withdrawalBalanceErrorMessage');
-
-                // Réinitialiser les messages d'erreur
-                withdrawalErrorMessage.style.display = 'none';
-                withdrawalBalanceErrorMessage.style.display = 'none';
-
-                // Debugging: afficher les valeurs
-                console.log('Montant à retirer:', amount);
-
-                // Vérifier si le montant est inférieur à 1000
-                if (amount < 1000) {
-                    event.preventDefault(); // Empêche la soumission du formulaire
-                    withdrawalErrorMessage.style.display = 'block'; // Affiche le message d'erreur
-                } 
-                // Vérifier si le montant dépasse le solde du client (si nécessaire, vous pouvez gérer cela ici)
-                // Vous aurez besoin d'ajouter une logique pour obtenir le solde ici si vous le souhaitez
-            });
-
-            // Masquer les messages d'erreur lors de la saisie
-            document.getElementById('withdrawalAmount').addEventListener('input', function() {
-                const amount = parseFloat(this.value);
-                const withdrawalErrorMessage = document.getElementById('withdrawalErrorMessage');
-                const withdrawalBalanceErrorMessage = document.getElementById('withdrawalBalanceErrorMessage');
-
-                // Vérifier si le montant est valide
-                withdrawalErrorMessage.style.display = (amount >= 1000) ? 'none' : 'block';
-                // Vous pouvez également gérer la vérification du solde ici si nécessaire
-            });
+</script>
 
 
 
+<script>
+    document.getElementById('withdrawalAccount').addEventListener('input', function() {
+        const accountNumber = this.value;
 
-$('#annulationModal').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget); // Bouton qui a déclenché le modal
-                var transactionId = button.data('transaction-id'); // Récupérer l'ID de la transaction
+        if (accountNumber.length >= 5) { // Vérifiez si le numéro de compte est valide
+            fetch(`/api/get-account-info/${accountNumber}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert(data.message); // Affichez le message d'erreur
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des informations :', error);
+                });
+        }
+    });
 
-                // Mettre à jour le champ de l'ID de la transaction
-                var modal = $(this);
-                modal.find('#transactionId').val(transactionId);
-            });
+    document.getElementById('withdrawalForm').addEventListener('submit', function(event) {
+        const amount = parseFloat(document.getElementById('withdrawalAmount').value);
+        const withdrawalErrorMessage = document.getElementById('withdrawalErrorMessage');
+        const withdrawalBalanceErrorMessage = document.getElementById('withdrawalBalanceErrorMessage');
+
+        // Réinitialiser les messages d'erreur
+        withdrawalErrorMessage.style.display = 'none';
+        withdrawalBalanceErrorMessage.style.display = 'none';
+
+        // Debugging: afficher les valeurs
+        console.log('Montant à retirer:', amount);
+
+        // Vérifier si le montant est inférieur à 1000
+        if (amount < 1000) {
+            event.preventDefault(); // Empêche la soumission du formulaire
+            withdrawalErrorMessage.style.display = 'block'; // Affiche le message d'erreur
+        } 
+        // Vérifier si le montant dépasse le solde du client (si nécessaire, vous pouvez gérer cela ici)
+        // Vous aurez besoin d'ajouter une logique pour obtenir le solde ici si vous le souhaitez
+    });
+
+    // Masquer les messages d'erreur lors de la saisie
+    document.getElementById('withdrawalAmount').addEventListener('input', function() {
+        const amount = parseFloat(this.value);
+        const withdrawalErrorMessage = document.getElementById('withdrawalErrorMessage');
+        const withdrawalBalanceErrorMessage = document.getElementById('withdrawalBalanceErrorMessage');
+
+        // Vérifier si le montant est valide
+        withdrawalErrorMessage.style.display = (amount >= 1000) ? 'none' : 'block';
+        // Vous pouvez également gérer la vérification du solde ici si nécessaire
+    });
 </script>
 
 <script>
