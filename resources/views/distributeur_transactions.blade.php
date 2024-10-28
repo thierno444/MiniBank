@@ -134,13 +134,7 @@
             <i class="fas fa-file-invoice me-1"></i>
             Facture
         </button>
-        <form action="{{ route('annuler-transaction', $transaction->id) }}" method="POST" style="display: inline;">
-            @csrf
-            <button type="submit" class="btn btn-danger btn-sm rounded-pill">
-                <i class="fas fa-times me-1"></i>
-                Annuler
-            </button>
-        </form>
+       
         
     </td>
 </tr>
