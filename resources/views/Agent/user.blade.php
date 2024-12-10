@@ -1,8 +1,7 @@
 @extends('layouts.sidebar-navbarA')
 
 @section('content')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 <div class="container-fluid px-4">
     <!-- En-tête avec titre et bouton d'ajout -->
     <div class="d-flex justify-content-between align-items-center mb-4">

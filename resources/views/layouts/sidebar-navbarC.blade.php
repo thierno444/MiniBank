@@ -182,7 +182,7 @@
                                         <img src="{{ auth()->user()->photo ? asset('storage/' . auth()->user()->photo) : 'https://via.placeholder.com/100' }}" 
                                              class="rounded-circle profile-photo" 
                                              width="40" height="40"
-                                             alt="Photo de profil">
+                                             alt="Photo">
                                         <div class="d-none d-lg-block ms-2">
                                             <div class="fw-bold">{{ auth()->user()->prenom }}</div>
                                             <div class="small text-muted">{{ auth()->user()->role }}</div>
